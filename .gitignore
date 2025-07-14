@@ -1,0 +1,29 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+# PyInstaller
+*.spec
+
+# JSON output
+demo_output.json
+demos/*.json
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Misc
+.env
+.DS_Store
+demos/*.json
