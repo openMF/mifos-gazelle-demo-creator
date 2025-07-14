@@ -1,0 +1,98 @@
+/* Base styles for the entire application */
+Screen {
+    background:rgb(0, 0, 0); /* Dark background */
+    color: #abb2bf; /* Light grey text */
+    padding: 1 2; /* Some padding around the screen content */
+}
+
+/* Styling for the main title */
+#title {
+    text-align: center;
+    color: #fade43; /* Blue color for the title */
+    text-style: bold;
+    margin-top: 1;
+    margin-bottom: 2;
+    border-bottom: heavy #61afef; /* Underline effect */
+    padding-bottom: 1;
+}
+
+/* Styling for the form container */
+#form {
+    background:rgb(0, 0, 0); /* Slightly lighter dark background for the form */
+    border: rgb(0, 89, 255); /* Cyan border */
+    padding: 2 4; /* Padding inside the form */
+    margin: 1 8; /* Margin to center the form and give it space */
+    align-horizontal: center; /* Center content horizontally within the form */
+}
+
+/* Styling for Static text labels */
+Static {
+    color: #e06c75; /* Reddish color for labels */
+    margin-top: 1;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+/* Styling for Input fields */
+Input {
+    background: #4b5263; /* Darker background for input fields */
+    color: #abb2bf; /* Light grey text */
+    border: round #56b6c2; /* Cyan rounded border */
+    padding: 0 1; /* Padding inside the input */
+    margin-bottom: 1;
+    width: 100%; /* Make input fields take full width of their container */
+}
+
+Input:focus {
+    border: round #98c379; /* Green border when focused */
+}
+
+/* Styling for Buttons */
+Button {
+    background: #98c379; /* Green background for buttons */
+    color: #282c34; /* Dark text on buttons */
+    text-style: bold;
+    border: round #98c379;
+    padding: 0 2;
+    margin-top: 2;
+    margin-bottom: 1;
+    width: auto; /* Buttons take only necessary width */
+    align-horizontal: center;
+}
+
+Button:hover {
+    background: #7ca061; /* Darker green on hover */
+}
+
+/* Styling for the status message (errors/success) */
+#status {
+    color: #e06c75; /* Red color for error messages */
+    text-align: center;
+    text-style: bold;
+    margin-bottom: 1;
+}
+
+/* Styling for the Footer */
+Footer {
+    background: #3e4451; /* Match form background */
+    color: #abb2bf;
+    height: 1;
+    dock: bottom; /* Dock the footer to the bottom */
+}
+
+/* Styling for the ConfirmScreen modal */
+ConfirmScreen {
+    background: #282c34 80%; /* Semi-transparent dark background */
+    align: center middle; /* Center the content */
+}
+
+ConfirmScreen Static {
+    background: #3e4451; /* Background for the message box */
+    color: #98c379; /* Green text for success message */
+    text-align: center;
+    text-style: bold;
+    padding: 3 6; /* Padding around the message */
+    border: thick #98c379; /* Green border */
+    width: auto;
+    height: auto;
+}

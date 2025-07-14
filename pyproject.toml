@@ -1,0 +1,22 @@
+[project]
+name = "demo-creator"
+version = "0.1.0"
+description = "A TUI tool to create and upload demo steps as JSON to JFrog."
+authors = [{ name = "Yash Sharma" }]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+  "textual>=4.0.0",
+  "jsonschema>=4.24.0",
+  "requests>=2.31.0"
+]
+
+[project.scripts]
+demo-creator = "demo_creator:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["demo_creator"]
