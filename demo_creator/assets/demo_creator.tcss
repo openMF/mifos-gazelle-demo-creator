@@ -1,98 +1,127 @@
-/* Base styles for the entire application */
 Screen {
-    background:rgb(0, 0, 0); /* Dark background */
-    color: #abb2bf; /* Light grey text */
-    padding: 1 2; /* Some padding around the screen content */
+    background: #18181c;
+    color: #abb2bf;
+    min-width: 80;
+    padding: 0;
+    align: center middle;
 }
 
-/* Styling for the main title */
-#title {
+/* Default fallback for Vertical */
+Vertical {
+    width: 100%;
+    max-width: 68;
+    margin: 2 0; 
+    padding: 2 6;
+}
+
+#login_form,
+#main_menu,
+#demo_creator_form,
+#upload_form {
+    background: #23252b;
+    border: heavy #61afef;
+    max-width: 68;
+    min-width: 40;
+    margin: 2 0; /* Vertical margin only */
+    padding: 2 8;
+}
+
+/* Change colour and border for different screens */
+#main_menu {
+    background: #23272e;
+    border: heavy #56b6c2;
+}
+#demo_creator_form {
+    background: #1e2229;
+    border: heavy #fad943;
+}
+#upload_form {
+    background: #21252b;
+    border: heavy #7f2fff;
+}
+
+/* Titles */
+#title,
+#login_title,
+#main_menu_title {
     text-align: center;
-    color: #fade43; /* Blue color for the title */
+    color: #61afef;
     text-style: bold;
     margin-top: 1;
     margin-bottom: 2;
-    border-bottom: heavy #61afef; /* Underline effect */
+    border-bottom: heavy #98c379;
     padding-bottom: 1;
 }
 
-/* Styling for the form container */
-#form {
-    background:rgb(0, 0, 0); /* Slightly lighter dark background for the form */
-    border: rgb(0, 89, 255); /* Cyan border */
-    padding: 2 4; /* Padding inside the form */
-    margin: 1 8; /* Margin to center the form and give it space */
-    align-horizontal: center; /* Center content horizontally within the form */
+#main_menu_user, #main_menu_email {
+    color: #56b6c2;
+    text-align: center;
+    text-style: bold;
+    margin-top: 1;
 }
 
-/* Styling for Static text labels */
+#main_menu_title { color: #fad943; border-bottom: heavy #56b6c2; }
+
+#status, #login_status, #upload_status {
+    color: #e06c75;
+    text-align: center;
+    text-style: bold;
+    margin-bottom: 1;
+}
+#upload_status { color: #d55fde; }
+
+/* Static labels */
 Static {
-    color: #e06c75; /* Reddish color for labels */
+    color: #e5c07b;
     margin-top: 1;
     margin-bottom: 0;
     text-align: left;
+    min-width: 16;
+}
+#login_form Static,
+#main_menu Static,
+#demo_creator_form Static,
+#upload_form Static {
+    color: #abb2bf;
 }
 
-/* Styling for Input fields */
+/* Inputs */
 Input {
-    background: #4b5263; /* Darker background for input fields */
-    color: #abb2bf; /* Light grey text */
-    border: round #56b6c2; /* Cyan rounded border */
-    padding: 0 1; /* Padding inside the input */
+    background: #282c34;
+    color: #dadada;
+    border: round #56b6c2;
+    padding: 0 1;
     margin-bottom: 1;
-    width: 100%; /* Make input fields take full width of their container */
+    width: 100%;
+    max-width: 48;
 }
-
 Input:focus {
-    border: round #98c379; /* Green border when focused */
+    border: round #98c379;
+    background: #323943;
 }
 
-/* Styling for Buttons */
+/* Buttons */
 Button {
-    background: #98c379; /* Green background for buttons */
-    color: #282c34; /* Dark text on buttons */
+    background: #98c379;
+    color: #282c34;
     text-style: bold;
-    border: round #98c379;
+    border: round #56b6c2;
     padding: 0 2;
     margin-top: 2;
     margin-bottom: 1;
-    width: auto; /* Buttons take only necessary width */
+    width: auto;
     align-horizontal: center;
 }
-
 Button:hover {
-    background: #7ca061; /* Darker green on hover */
+    background: #61afef;
+    color: #232337;
+    border: round #fae382;
 }
 
-/* Styling for the status message (errors/success) */
-#status {
-    color: #e06c75; /* Red color for error messages */
-    text-align: center;
-    text-style: bold;
-    margin-bottom: 1;
-}
-
-/* Styling for the Footer */
+/* Footer bar */
 Footer {
-    background: #3e4451; /* Match form background */
+    background: #21252b;
     color: #abb2bf;
     height: 1;
-    dock: bottom; /* Dock the footer to the bottom */
-}
-
-/* Styling for the ConfirmScreen modal */
-ConfirmScreen {
-    background: #282c34 80%; /* Semi-transparent dark background */
-    align: center middle; /* Center the content */
-}
-
-ConfirmScreen Static {
-    background: #3e4451; /* Background for the message box */
-    color: #98c379; /* Green text for success message */
-    text-align: center;
-    text-style: bold;
-    padding: 3 6; /* Padding around the message */
-    border: thick #98c379; /* Green border */
-    width: auto;
-    height: auto;
+    dock: bottom;
 }

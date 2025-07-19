@@ -1,6 +1,6 @@
 from textual.screen import Screen
 from textual.containers import Vertical
-from textual.widgets import Static, Input, Button
+from textual.widgets import Static, Input, Button, Footer
 from textual.app import ComposeResult
 from demo_creator.utils import upload_to_jfrog
 
@@ -21,6 +21,7 @@ class UploadScreen(Screen):
             yield self.status
             yield Button("Upload", id="upload_button")
             yield Button("Cancel", id="cancel_upload")
+        yield Footer()
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "upload_button":

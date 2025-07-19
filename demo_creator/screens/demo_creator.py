@@ -16,8 +16,8 @@ from demo_creator.utils import (
 
 class DemoCreatorScreen(Screen):
     def compose(self) -> ComposeResult:
-        yield Static("Demo Creator", id="title", classes="title")
-        with Vertical(id="form"):
+        with Vertical(id="demo_creator_form"):
+            yield Static("Demo Creator", id="title")
             self.status = Static("", id="status")
             yield self.status
             yield Static("Demo Name:")
@@ -46,6 +46,9 @@ class DemoCreatorScreen(Screen):
         elif label == "Submit":
             self.capture_step_input()
 
+    def clear_form(self):
+        self.query_one("#demo_creator_form").remove_children()
+
     def start_demo_flow(self):
         try:
             count = int(self.step_count.value.strip())
@@ -65,11 +68,8 @@ class DemoCreatorScreen(Screen):
         except Exception as e:
             self.status.update(f"[red]❌ {e}")
 
-    def clear_form(self):
-        self.query_one("#form").remove_children()
-
     def render_step_form(self):
-        form = self.query_one("#form")
+        form = self.query_one("#demo_creator_form")
         form.mount(Static(f"Step {self.step_index} Title:"))
         self.step_title = Input(placeholder="e.g., Open Dashboard")
         form.mount(self.step_title)
@@ -129,7 +129,7 @@ class DemoCreatorScreen(Screen):
             time_str = now.strftime("%H-%M-%S")
             snapshot_latest_to_dated(date_str, time_str, latest_dir=latest_dir)
             self.app.last_demo_file = latest_file
-            self.app.pop_screen()               # Done with creator
+            self.app.pop_screen()
             self.app.show_upload_screen()
         except Exception as ve:
             self.status.update(f"[red]❌ Validation Error: {ve}")
