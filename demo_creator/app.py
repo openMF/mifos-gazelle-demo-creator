@@ -1,5 +1,7 @@
 import json
 import os
+import datetime
+import uuid
 from jsonschema import validate
 from textual.app import App, ComposeResult
 from textual.widgets import Static, Input, Button, Footer
@@ -8,6 +10,11 @@ from textual.reactive import reactive
 from textual import events
 from demo_creator.schema import schema
 from demo_creator.screens import UploadScreen
+from demo_creator.utils import (
+    get_demo_file_name,
+    update_metadata,
+    snapshot_latest_to_dated
+)
 
 class DemoCreatorApp(App):
     CSS_PATH = "./assets/demo_creator.tcss"
@@ -55,6 +62,7 @@ class DemoCreatorApp(App):
                 raise ValueError("Must be at least 1 step.")
             self.total_steps = count
             self.demo_data = {
+                "demoId": str(uuid.uuid4()),   # ADD THIS LINE
                 "demoName": self.demo_name.value.strip(),
                 "steps": {}
             }
@@ -118,14 +126,34 @@ class DemoCreatorApp(App):
         self.clear_form()
         self.render_step_form()
 
-
     def finalize(self):
         try:
             validate(instance=self.demo_data, schema=schema)
-            os.makedirs("demos", exist_ok=True)
-            with open("demos/demo_output.json", "w") as f:
+            demo_name = self.demo_data["demoName"]
+            file_name = get_demo_file_name(demo_name)
+
+            # For now, hardcode username or grab from user profile/login (update later as needed)
+            username = getattr(self, 'current_user', 'system')
+
+            # Write JSON file to latest/
+            latest_dir = os.path.join("demos", "latest")
+            os.makedirs(latest_dir, exist_ok=True)
+            latest_file = os.path.join(latest_dir, file_name)
+            with open(latest_file, "w") as f:
                 json.dump(self.demo_data, f, indent=2)
+
+            # Update metadata.json in latest/
+            update_metadata(self.demo_data, file_name, username)
+
+            # Take a snapshot of latest/ (including metadata.json!) into dated/time-stamped dir
+            now = datetime.datetime.now()
+            date_str = now.strftime("%Y-%m-%d")
+            time_str = now.strftime("%H-%M-%S")
+            snapshot_latest_to_dated(date_str, time_str, latest_dir=latest_dir)
+
+            self.last_demo_file = latest_file  # (for any downstream UI/screens)
             self.push_screen(UploadScreen())
+
         except Exception as ve:
             self.status.update(f"[red]❌ Validation Error: {ve}")
 
