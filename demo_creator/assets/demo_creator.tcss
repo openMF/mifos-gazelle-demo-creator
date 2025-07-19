@@ -1,127 +1,25 @@
-Screen {
-    background: #18181c;
-    color: #abb2bf;
-    min-width: 80;
-    padding: 0;
-    align: center middle;
-}
+/* ------ demo_creator.tcss ------ */
 
-/* Default fallback for Vertical */
-Vertical {
-    width: 100%;
-    max-width: 68;
-    margin: 2 0; 
-    padding: 2 6;
-}
-
-#login_form,
-#main_menu,
-#demo_creator_form,
-#upload_form {
-    background: #23252b;
-    border: heavy #61afef;
-    max-width: 68;
-    min-width: 40;
-    margin: 2 0; /* Vertical margin only */
-    padding: 2 8;
-}
-
-/* Change colour and border for different screens */
-#main_menu {
-    background: #23272e;
-    border: heavy #56b6c2;
-}
 #demo_creator_form {
-    background: #1e2229;
-    border: heavy #fad943;
-}
-#upload_form {
-    background: #21252b;
-    border: heavy #7f2fff;
-}
-
-/* Titles */
-#title,
-#login_title,
-#main_menu_title {
-    text-align: center;
-    color: #61afef;
-    text-style: bold;
-    margin-top: 1;
-    margin-bottom: 2;
-    border-bottom: heavy #98c379;
-    padding-bottom: 1;
+  width: 70%;
+  max-width: 90;
+  height: auto;
+  align: center middle;
+  background: #2b2b2b;
+  border: round #444444;
+  padding: 2 4;
 }
 
-#main_menu_user, #main_menu_email {
-    color: #56b6c2;
-    text-align: center;
-    text-style: bold;
-    margin-top: 1;
+#demo_creator_form Static {
+  margin-top: 1;
+  margin-bottom: 0;
 }
-
-#main_menu_title { color: #fad943; border-bottom: heavy #56b6c2; }
-
-#status, #login_status, #upload_status {
-    color: #e06c75;
-    text-align: center;
-    text-style: bold;
-    margin-bottom: 1;
+#status {
+  text-align: center;
+  margin-top: 1;
+  margin-bottom: 1;
 }
-#upload_status { color: #d55fde; }
-
-/* Static labels */
-Static {
-    color: #e5c07b;
-    margin-top: 1;
-    margin-bottom: 0;
-    text-align: left;
-    min-width: 16;
-}
-#login_form Static,
-#main_menu Static,
-#demo_creator_form Static,
-#upload_form Static {
-    color: #abb2bf;
-}
-
-/* Inputs */
-Input {
-    background: #282c34;
-    color: #dadada;
-    border: round #56b6c2;
-    padding: 0 1;
-    margin-bottom: 1;
-    width: 100%;
-    max-width: 48;
-}
-Input:focus {
-    border: round #98c379;
-    background: #323943;
-}
-
-/* Buttons */
-Button {
-    background: #98c379;
-    color: #282c34;
-    text-style: bold;
-    border: round #56b6c2;
-    padding: 0 2;
-    margin-top: 2;
-    margin-bottom: 1;
-    width: auto;
-    align-horizontal: center;
-}
-Button:hover {
-    background: #61afef;
-    color: #232337;
-    border: round #fae382;
-}
-
-/* Footer bar */
-Footer {
-    background: #21252b;
-    color: #abb2bf;
-    height: 1;
-    dock: bottom;
+#demo_creator_form Button {
+  margin-top: 2;
+  width: 100%;
 }

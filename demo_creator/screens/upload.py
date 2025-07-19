@@ -5,6 +5,7 @@ from textual.app import ComposeResult
 from demo_creator.utils import upload_to_jfrog
 
 class UploadScreen(Screen):
+    CSS_PATH = "../assets/upload.tcss"
     def compose(self) -> ComposeResult:
         with Vertical(id="upload_form"):
             yield Static("🔼 Upload to JFrog Artifactory")

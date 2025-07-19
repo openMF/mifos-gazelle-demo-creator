@@ -15,6 +15,7 @@ from demo_creator.utils import (
 )
 
 class DemoCreatorScreen(Screen):
+    CSS_PATH = "../assets/demo_creator.tcss"
     def compose(self) -> ComposeResult:
         with Vertical(id="demo_creator_form"):
             yield Static("Demo Creator", id="title")

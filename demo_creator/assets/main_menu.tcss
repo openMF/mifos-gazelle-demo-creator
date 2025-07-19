@@ -1,0 +1,78 @@
+/* ------ main_menu.tcss ------ */
+
+#main_menu {
+  width: 80%;
+  max-width: 100;
+  height: auto;
+  margin-top: 3;
+  padding: 2 4;
+  background: #2b2b2b;
+  border: round #444444;
+}
+
+#main_menu_user, #main_menu_email {
+  text-align: center;
+  color: #b0c4de;
+  margin-bottom: 1;
+}
+
+#create_demo_btn {
+  margin-top: 2;
+  margin-bottom: 2;
+  width: 100%;
+}
+
+#demo_list_title {
+  text-align: center;
+  text-style: bold;
+  color: #add8e6;
+  margin-top: 2;
+  margin-bottom: 1;
+}
+
+#demo_table_header {
+  background: #b0c4de;
+  color: #1e1e1e;
+  text-style: bold;
+  padding: 0 1;
+  height: auto;
+  border-bottom: solid #7b68ee;
+}
+
+.demo_row {
+  background: #2b2b2b;
+  border-bottom: dashed #3a3a3a;
+  padding: 0 0;
+  height: auto;
+}
+.demo_row:even {
+  background: #303030;
+}
+.demo_col {
+  padding: 0 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 1;
+}
+.demo_col_name { width: 25%; }
+.demo_col_desc { width: 50%; }
+.demo_col_updated {
+  width: 25%;
+  text-align: right;
+  color: #90ee90;
+}
+
+.demo_col_actions { width: 15%; text-align: center; }
+
+.show_btn, .edit_btn, .delete_btn {
+  padding: 0 1;
+  min-width: 8;
+  margin-left: 1;
+  margin-right: 1;
+}
+.show_btn { background: #81dab6; color: #222; border: solid #81dab6; }
+.edit_btn { background: #f8e06c; color: #222; border: solid #ffd700; }
+.delete_btn { background: #e06c75; color: #fff; border: solid #e06c75; }
+.show_btn:hover { background: #63b19c; }
+.edit_btn:hover { background: #e7bd2a; }
+.delete_btn:hover { background: #a9323a; }

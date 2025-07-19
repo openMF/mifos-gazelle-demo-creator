@@ -7,7 +7,7 @@ from demo_creator.screens import (
 )
 
 class DemoCreatorApp(App):
-    CSS_PATH = "./assets/demo_creator.tcss"
+    CSS_PATH = "./assets/base.tcss"
 
     def on_mount(self):
         self.push_screen(LoginScreen())

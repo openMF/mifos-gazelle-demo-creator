@@ -4,6 +4,7 @@ from textual.widgets import Static, Input, Button, Footer
 from textual.app import ComposeResult
 
 class LoginScreen(Screen):
+    CSS_PATH = "../assets/login.tcss"
     def compose(self) -> ComposeResult:
         with Vertical(id="login_form"):
             yield Static("Enter your user details", id="login_title")
