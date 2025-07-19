@@ -9,7 +9,10 @@ from textual.containers import Vertical
 from textual.reactive import reactive
 from textual import events
 from demo_creator.schema import schema
-from demo_creator.screens import UploadScreen
+from demo_creator.screens import ( 
+    UploadScreen, 
+    LoginScreen
+)    
 from demo_creator.utils import (
     get_demo_file_name,
     update_metadata,
@@ -162,3 +165,5 @@ class DemoCreatorApp(App):
         if event.key == "ctrl+c":
             self.exit()
 
+    def on_mount(self) -> None:
+        self.push_screen(LoginScreen())

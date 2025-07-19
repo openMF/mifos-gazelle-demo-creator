@@ -41,3 +41,17 @@ class UploadScreen(Screen):
         )
         color = "green" if success else "red"
         self.status.update(f"[{color}]{message}")
+
+class LoginScreen(Screen):
+    def compose(self) -> ComposeResult:
+        with Vertical(id="login_form"):
+            yield Static("Enter your user details", id="login_title")
+            yield Static("Username:")
+            self.username = Input(placeholder="e.g., alice", id="username_input")
+            yield self.username
+            yield Static("Email:")
+            self.email = Input(placeholder="user@example.com", id="email_input")
+            yield self.email
+            self.status = Static("", id="login_status")
+            yield self.status
+            yield Button("Continue", id="continue_login")
