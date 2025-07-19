@@ -11,7 +11,8 @@ from textual import events
 from demo_creator.schema import schema
 from demo_creator.screens import ( 
     UploadScreen, 
-    LoginScreen
+    LoginScreen, 
+    MainMenuScreen
 )    
 from demo_creator.utils import (
     get_demo_file_name,
@@ -167,3 +168,12 @@ class DemoCreatorApp(App):
 
     def on_mount(self) -> None:
         self.push_screen(LoginScreen())
+
+    def show_demo_creator_form(self):
+        """Show the demo creation form as before, resetting step index etc."""
+        self.step_index = 1
+        self.total_steps = 0
+        self.demo_data = {}
+        self.pop_screen()    
+        self.clear()
+        self.compose()

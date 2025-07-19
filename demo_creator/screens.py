@@ -55,3 +55,15 @@ class LoginScreen(Screen):
             self.status = Static("", id="login_status")
             yield self.status
             yield Button("Continue", id="continue_login")
+
+class MainMenuScreen(Screen):
+    def compose(self) -> ComposeResult:
+        with Vertical(id="main_menu"):
+            yield Static("Main Menu", id="main_menu_title")
+            yield Static(f"User: {getattr(self.app, 'current_user', '')}", id="main_menu_user")
+            yield Static(f"Email: {getattr(self.app, 'current_email', '')}", id="main_menu_email")
+            yield Button("Create New Demo", id="create_demo_btn")
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "create_demo_btn":
+            self.app.show_demo_creator_form()
+
