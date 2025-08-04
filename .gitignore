@@ -27,3 +27,6 @@ demos/*.json
 .env
 .DS_Store
 demos/*.json
+
+# Demos
+demos/

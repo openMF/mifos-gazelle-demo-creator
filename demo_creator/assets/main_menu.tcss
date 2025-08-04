@@ -1,0 +1,109 @@
+/* ------ main_menu.tcss ------ */
+
+#main_menu {
+    width: 90%;
+    /* Increased max-width for more overall space */
+    max-width: 130; /* Keep this larger value */
+    min-width: 76;
+    margin-top: 3;
+    padding: 2 4;
+    background: #2b2b2b;
+    border: round #444444;
+    align: center middle;
+}
+
+#main_menu_user,
+#main_menu_email {
+    text-align: center;
+    color: #b0c4de;
+    margin-bottom: 1;
+}
+
+#create_demo_btn {
+    margin-top: 2;
+    margin-bottom: 2;
+    width: 100%;
+}
+
+#demo_list_title {
+    text-align: center;
+    text-style: bold;
+    color: #add8e6;
+    margin-top: 2;
+    margin-bottom: 1;
+}
+
+#demo_table_header {
+    background: #b0c4de;
+    color: #1e1e1e;
+    text-style: bold;
+    padding: 0 1;
+    border-bottom: solid #7b68ee;
+    height: auto;
+}
+
+/* Table rows */
+.demo_row {
+    background: #23252b;
+    border-bottom: dashed #3a3a3a;
+    padding: 1 0;
+    height: auto; /* Ensure height is auto to contain button content */
+    min-width: 76;
+    max-width: 128; /* Keep this larger value */
+    align: left middle;
+}
+.demo_row:even {
+    background: #282828;
+}
+.demo_col {
+    padding: 0 1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: auto; /* Ensure individual columns can grow vertically if needed */
+    align: left middle; /* Default for most columns */
+}
+.demo_col_name    { width: 22%; min-width: 16; max-width: 24; }
+.demo_col_desc    { width: 45%; min-width: 30; max-width: 48; }
+.demo_col_updated { width: 20%; min-width: 16; max-width: 24; text-align: right; color: #90ee90; }
+
+.demo_col_actions {
+    /* Increased width significantly to fit 3 buttons */
+    width: 20%; /* Keep this, adjust if needed */
+    min-width: 18; /* Keep this, adjust if needed */
+    max-width: 28; /* Keep this, adjust if needed */
+    text-align: center; /* Center the overall group of buttons horizontally */
+    align: center middle; /* Use valid align values for the column itself */
+    height: auto; /* Crucial for buttons to render fully */
+}
+
+/* Action buttons */
+.show_btn, .edit_btn, .delete_btn {
+    padding: 0 1; /* Changed 0.5 to 1 (integer) */
+    min-width: 7; /* Increased slightly to account for integer padding */
+    width: auto;
+    margin-left: 1; /* Changed 0.5 to 1 (integer) */
+    margin-right: 1; /* Changed 0.5 to 1 (integer) */
+    height: auto; /* Allow buttons to determine their own height */
+    text-align: center; /* Ensure text is centered within the button */
+    /* Removed display: inline-block; as it's not supported */
+}
+
+.show_btn   { background: #81dab6; color: #18181c; border: solid #67b595; }
+.edit_btn   { background: #f8e06c; color: #222;    border: solid #ffd700; }
+.delete_btn { background: #e06c75; color: #fff;    border: solid #e06c75; }
+
+.show_btn:hover   { background: #67b595; }
+.edit_btn:hover   { background: #ffe45c; }
+.delete_btn:hover { background: #a9323a; }
+
+Button:focus {
+    border: thick #add8e6;
+}
+
+/* Add some vertical space */
+Footer {
+    background: #222;
+    color: #aaa;
+    height: 1;
+    dock: bottom;
+}

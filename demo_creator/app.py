@@ -1,136 +1,22 @@
-import json
-import os
-from jsonschema import validate
-from textual.app import App, ComposeResult
-from textual.widgets import Static, Input, Button, Footer
-from textual.containers import Vertical
-from textual.reactive import reactive
-from textual import events
-from demo_creator.schema import schema
-from demo_creator.screens import UploadScreen
+from textual.app import App
+from demo_creator.screens import (
+    LoginScreen,
+    MainMenuScreen,
+    DemoCreatorScreen,
+    UploadScreen,
+)
 
 class DemoCreatorApp(App):
-    CSS_PATH = "./assets/demo_creator.tcss"
-    step_index = reactive(1)
-    total_steps = reactive(0)
-    demo_data = reactive({})
+    CSS_PATH = "./assets/base.tcss"
 
-    def compose(self) -> ComposeResult:
-        yield Static(" Demo Creator", id="title", classes="title")
-        with Vertical(id="form"):
-            self.status = Static("", id="status")
-            yield self.status
+    def on_mount(self):
+        self.push_screen(LoginScreen())
 
-            yield Static("Demo Name:")
-            self.demo_name = Input(placeholder="e.g., Onboarding Walkthrough")
-            yield self.demo_name
+    def show_main_menu(self):
+        self.push_screen(MainMenuScreen())
 
-            yield Static("Demo Description (optional):")
-            self.demo_description = Input(placeholder="Short description...")
-            yield self.demo_description
+    def show_demo_creator(self):
+        self.push_screen(DemoCreatorScreen())
 
-            yield Static("How many steps?")
-            self.step_count = Input(placeholder="e.g., 3")
-            yield self.step_count
-
-            yield Button("Start", id="start_button")
-
-        yield Footer()
-
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        label = event.button.label
-        if event.button.id == "start_button":
-            self.start_demo_flow()
-        elif label == "Next":
-            self.capture_step_input()
-        elif label == "Back":
-            self.go_back_step()
-        elif label == "Submit":
-            self.capture_step_input()
-
-    def start_demo_flow(self):
-        try:
-            count = int(self.step_count.value.strip())
-            if count < 1:
-                raise ValueError("Must be at least 1 step.")
-            self.total_steps = count
-            self.demo_data = {
-                "demoName": self.demo_name.value.strip(),
-                "steps": {}
-            }
-            desc = self.demo_description.value.strip()
-            if desc:
-                self.demo_data["demoDescription"] = desc
-            self.clear_form()
-            self.render_step_form()
-        except Exception as e:
-            self.status.update(f"[red]❌ {e}")
-
-    def clear_form(self):
-        self.query_one("#form").remove_children()
-
-    def render_step_form(self):
-        form = self.query_one("#form")
-        form.mount(Static(f"Step {self.step_index} Title:"))
-        self.step_title = Input(placeholder="e.g., Open Dashboard")
-        form.mount(self.step_title)
-
-        form.mount(Static("Step URL:"))
-        self.step_url = Input(placeholder="e.g., https://example.com")
-        form.mount(self.step_url)
-
-        form.mount(Static("Step Details:"))
-        self.step_details = Input(placeholder="What happens in this step?")
-        form.mount(self.step_details)
-
-        step_data = self.demo_data["steps"].get(str(self.step_index))
-        if step_data:
-            self.step_title.value = step_data.get("title", "")
-            self.step_url.value = step_data.get("url", "")
-            self.step_details.value = step_data.get("details", "")
-
-        if self.step_index > 1:
-            form.mount(Button("Back"))
-        label = "Submit" if self.step_index == self.total_steps else "Next"
-        form.mount(Button(label))
-
-    def capture_step_input(self):
-        self.demo_data["steps"][str(self.step_index)] = {
-            "title": self.step_title.value.strip(),
-            "url": self.step_url.value.strip(),
-            "details": self.step_details.value.strip()
-        }
-        self.step_index += 1
-
-        if self.step_index <= self.total_steps:
-            self.clear_form()
-            self.render_step_form()
-        else:
-            self.finalize()
-
-    def go_back_step(self):
-        self.demo_data["steps"][str(self.step_index)] = {
-            "title": self.step_title.value.strip(),
-            "url": self.step_url.value.strip(),
-            "details": self.step_details.value.strip()
-        }
-        self.step_index = max(1, self.step_index - 1)
-        self.clear_form()
-        self.render_step_form()
-
-
-    def finalize(self):
-        try:
-            validate(instance=self.demo_data, schema=schema)
-            os.makedirs("demos", exist_ok=True)
-            with open("demos/demo_output.json", "w") as f:
-                json.dump(self.demo_data, f, indent=2)
-            self.push_screen(UploadScreen())
-        except Exception as ve:
-            self.status.update(f"[red]❌ Validation Error: {ve}")
-
-    def on_key(self, event: events.Key) -> None:
-        # Only allow quitting explicitly
-        if event.key == "ctrl+c":
-            self.exit()
-
+    def show_upload_screen(self):
+        self.push_screen(UploadScreen())

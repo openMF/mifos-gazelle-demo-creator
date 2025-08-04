@@ -1,0 +1,51 @@
+/* ------ base.tcss ------ */
+Screen {
+  background: #1e1e1e;
+  color: white;
+  align: center middle;  /* center children like main forms */
+}
+
+Footer {
+  background: #333333;
+  color: #aaaaaa;
+  height: 1;
+  dock: bottom;
+}
+
+Button {
+    background: #98c379; /* Green background for buttons */
+    color: #282c34; /* Dark text on buttons */
+    text-style: bold;
+    border: round #98c379;
+    padding: 0 2;
+    margin-top: 2;
+    margin-bottom: 1;
+    width: auto; /* Buttons take only necessary width */
+    align-horizontal: center;
+}
+Button:hover {
+  background: #7b68ee;
+  border: solid #7b68ee;
+}
+Button:focus {
+  border: thick #e0b0ff;
+}
+
+Input {
+  border: solid #666666;
+  background: #2b2b2b;
+  color: white;
+  padding: 0 1;
+  margin-bottom: 1;
+}
+Input:focus {
+  border: solid #7b68ee;
+}
+
+Static#login_title, Static#main_menu_title, Static#title, Static#upload_form Static:first-child {
+  text-align: center;
+  text-style: bold;
+  color: #7b68ee;
+  margin-bottom: 2;
+  padding: 0 2;
+}
