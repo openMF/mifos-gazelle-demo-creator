@@ -1,0 +1,47 @@
+$accent: rgb(6, 100, 160);
+$accent-dark: rgb(2, 50, 80);
+$accent-light: rgb(220, 240, 255);
+$text: rgb(220, 220, 220);
+$text-muted: rgb(150, 150, 150);
+$background: rgb(15, 15, 20);
+$error: rgb(200, 60, 60);
+$button-bg: rgb(45, 55, 80);
+$button-text: rgb(230, 230, 230);
+$button-text-focus: rgb(255, 255, 255);
+$button-disabled-bg: rgb(40, 40, 50);
+$button-disabled-text: rgb(90, 90, 120);
+
+#confirm_overlay {
+    align: center middle;
+    background: $background;
+    border: double $accent;
+    padding: 2 4;
+    width: 46;
+    min-height: 7;
+    color: $text;
+}
+
+#confirm_message {
+    text-align: center;
+    text-style: bold;
+    color: $accent-light;
+    margin-bottom: 2;
+}
+
+#dialog_buttons {
+    layout: horizontal;
+    content-align: center middle;
+    margin-top: 1;
+}
+#dialog_buttons Button {
+    min-width: 10;
+    border: round $accent;
+    margin: 0 2;
+    background: $button-bg;
+    color: $button-text;
+    text-style: bold;
+}
+#dialog_buttons Button:focus {
+    background: $accent;
+    color: $button-text-focus;
+}

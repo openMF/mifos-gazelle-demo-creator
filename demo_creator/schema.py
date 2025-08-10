@@ -23,6 +23,11 @@ schema = {
                 }
             },
             "minProperties": 1
+        },
+        "tags": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "List of required DPG names for this demo"
         }
     }
 }

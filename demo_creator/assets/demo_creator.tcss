@@ -1,25 +1,144 @@
 /* ------ demo_creator.tcss ------ */
 
-#demo_creator_form {
-  width: 70%;
-  max-width: 90;
-  height: auto;
-  align: center middle;
-  background: #2b2b2b;
-  border: round #444444;
-  padding: 2 4;
+$accent: rgb(6, 100, 160);
+$accent-dark: rgb(2, 50, 80);
+$accent-light: rgb(220, 240, 255);
+$text: rgb(220, 220, 220);
+$text-muted: rgb(150, 150, 150);
+$background: rgb(15, 15, 20);
+$error: rgb(200, 60, 60);
+$button-bg: rgb(45, 55, 80);
+$button-text: rgb(230, 230, 230);
+$button-text-focus: rgb(255, 255, 255);
+$button-disabled-bg: rgb(40, 40, 50);
+$button-disabled-text: rgb(90, 90, 120);
+
+/* Main container (matches DemoDetailScreen) */
+#demo_detail_container, #demo_creator_form {
+    width: 70%;
+    max-width: 90;
+    min-width: 40;
+    height: 100%;
+    align: center middle;
+    background: $background;
+    color: $text;
+    border: round $accent-dark;
+    padding: 2 4;
+    layout: vertical;
 }
 
-#demo_creator_form Static {
-  margin-top: 1;
-  margin-bottom: 0;
+/* Screen title */
+#screen_title {
+    height: 3;
+    content-align: center middle;
+    text-style: bold;
+    border: tall $accent;
+    background: $accent-dark;
+    color: $accent-light;
+    margin-bottom: 1;
 }
-#status {
-  text-align: center;
-  margin-top: 1;
-  margin-bottom: 1;
+
+/* Status label */
+#status_label, #status {
+    height: 1;
+    margin-bottom: 1;
+    padding-left: 1;
+    text-align: center;
+    color: $error;
 }
-#demo_creator_form Button {
-  margin-top: 2;
-  width: 100%;
+
+/* Scrollable scroll container for form */
+#demo_scroll_container, #steps_scroll_container {
+    height: 1fr;
+    layout: vertical;
+    overflow-y: auto;
+    padding: 1 2;
+    border: solid $accent;
+    background: $background;
+    margin-bottom: 1;
+}
+
+/* Metadata/step headers and field labels */
+.section_header, .label {
+    text-style: bold;
+    padding-left: 0;
+    margin-top: 1;
+    margin-bottom: 1;
+}
+.step_label {
+    text-style: bold underline;
+    margin-bottom: 1;
+}
+
+/* Each step container */
+.step_container {
+    border: solid $accent-dark;
+    padding: 1 1 0 1;     /* No bottom padding */
+    margin-bottom: 1;
+    background: $background;
+    height: auto;
+}
+.step_container > * {
+    min-height: 1;
+    margin-bottom: 0;
+}
+
+/* Step input fields */
+.step_input, .meta_data, .step_field {
+    color: $text;
+    background: $background;
+    padding-left: 2;
+    margin-bottom: 1;
+}
+
+/* Remove Step (in-row) */
+.step_btn_row {
+    justify-content: flex-end;
+    margin-top: 1;
+    margin-bottom: 0;
+}
+.remove_step_btn {
+    color: $error;
+    text-style: bold;
+    margin-left: 1;
+    margin-top: 0;
+    margin-bottom: 0;
+    background: transparent;
+    border: none;
+}
+
+/* Bottom action buttons row */
+#bottom_buttons_row {
+    layout: horizontal;
+    height: 3;
+    margin-bottom: 1;
+    margin-top: 1;
+    content-align: center middle;
+}
+
+/* Action buttons styling */
+.submit_button, .add_step_btn, .cancel_button {
+    min-width: 12;
+    border: round $accent;
+    margin-right: 2;
+    text-style: bold;
+    padding-left: 3;
+    padding-right: 3;
+}
+.submit_button { background: $accent; color: $accent-light; }
+.add_step_btn  { background: $button-bg; color: $button-text; }
+.cancel_button { background: $button-disabled-bg; color: $button-disabled-text; }
+
+Input {
+    border: round $accent;
+    padding-left: 1;
+    padding-right: 1;
+    margin-bottom: 1;
+    background: $button-bg;
+    color: $button-text;
+}
+
+/* Footer (not scrollable, always at bottom) */
+Footer {
+    height: 1;
 }

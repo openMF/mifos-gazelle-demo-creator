@@ -78,6 +78,7 @@ def update_metadata(demo_data, file_name, username):
         entry["last_modified_by"] = username
         entry["deleted"] = False
         entry["version"] += 1
+        entry["tags"] = demo_data.get("tags", [])
     else:
         entry = {
             "demoId": demo_id,  # Store demoId in metadata as well!
@@ -91,7 +92,7 @@ def update_metadata(demo_data, file_name, username):
             "created_by": username,
             "last_modified_by": username,
             "deleted": False,
-            "tags": []
+            "tags": demo_data.get("tags", [])
         }
         metadata["demos"].append(entry)
 
