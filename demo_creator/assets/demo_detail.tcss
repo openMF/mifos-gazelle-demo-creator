@@ -1,0 +1,162 @@
+$accent: rgb(6, 100, 160);
+$accent-dark: rgb(2, 50, 80);
+$accent-light: rgb(220, 240, 255);
+$text: rgb(220, 220, 220);
+$text-muted: rgb(150, 150, 150);
+$background: rgb(15, 15, 20);
+$error: rgb(200, 60, 60);
+$button-bg: rgb(45, 55, 80);
+$button-text: rgb(230, 230, 230);
+$button-text-focus: rgb(255, 255, 255);
+$button-disabled-bg: rgb(40, 40, 50);
+$button-disabled-text: rgb(90, 90, 120);
+
+
+#demo_detail_container {
+    height: 100%;
+    width: 100%;
+    layout: vertical;
+    background: $background;
+    color: $text;
+    padding: 1 2;
+}
+
+/* Screen Title */
+#screen_title {
+    height: 3;
+    content-align: center middle;
+    text-style: bold;
+    border: tall $accent;
+    background: $accent-dark;
+    color: $accent-light;
+    margin-bottom: 1;
+}
+
+/* Top buttons row */
+#top_buttons_row {
+    layout: horizontal;
+    height: 3;
+    margin-bottom: 1;
+}
+#top_buttons_row Button {
+    margin-right: 2;
+}
+
+
+#top_buttons_row Button {
+    border: round $accent;
+    padding-left: 2;
+    padding-right: 2;
+    background: $button-bg;
+    color: $button-text;
+}
+
+#top_buttons_row Button:focus {
+    background: $accent;
+    color: $button-text-focus;
+    text-style: bold;
+}
+
+#top_buttons_row Button:disabled {
+    background: $button-disabled-bg;
+    color: $button-disabled-text;
+}
+
+/* Status label */
+#status_label {
+    height: 1;
+    margin-bottom: 1;
+    padding-left: 1;
+}
+
+/* Scroll container (scrollable for large number of steps) */
+#demo_scroll_container {
+    height: 1fr;
+    layout: vertical;
+    overflow-y: auto;
+    padding: 1 2;
+    border: solid $accent;
+}
+
+/* Metadata labels and data */
+.label {
+    text-style: bold;
+    padding-left: 0;
+    margin-top: 1;
+}
+
+/*
+* Removed 'height: 1' from .meta_data to allow content to wrap and grow vertically.
+* Content was being clipped if it was too long for a single line.
+*/
+.meta_data {
+    padding-left: 2;
+    color: $text-muted;
+}
+
+/* Steps container */
+#steps_container {
+    layout: vertical;
+}
+
+/* Each step's group */
+.step_container {
+    border: solid $accent-dark;
+    padding: 1 1;
+    margin-bottom: 1;
+    background: $background;
+    height: auto; /* Explicitly set height to auto to let it grow with its content */
+}
+
+/*
+* The `step_container > *` rule is fine, it just ensures the children of each step
+* container don't shrink below a single line.
+*/
+.step_container > * {
+    min-height: 1;
+}
+
+/* Step labels */
+.step_label {
+    text-style: bold underline;
+    margin-bottom: 1;
+}
+
+/*
+* Removed 'height: 1' from .step_field for the same reason as .meta_data.
+* This allows long URLs or details to wrap and remain visible.
+*/
+.step_field {
+    color: $text;
+    padding-left: 2;
+    margin-bottom: 1;
+}
+
+/* Inputs for editing */
+Input {
+    border: round $accent;
+    padding-left: 1;
+    padding-right: 1;
+    margin-bottom: 1;
+    background: $button-bg;
+    color: $button-text;
+}
+
+/* Section header */
+.section_header {
+    text-style: bold underline;
+    margin-top: 1;
+    margin-bottom: 1;
+}
+
+/* Empty steps */
+.empty_steps {
+    padding-left: 2;
+    color: $text-muted;
+    text-style: italic;
+}
+
+/* Footer */
+Footer {
+    height: 1;
+}
