@@ -1,87 +1,140 @@
-import datetime
+import os
+import json
 from textual.screen import Screen
 from textual.containers import Vertical, Horizontal
-from textual.widgets import Static, Button, Footer
+from textual.widgets import Static, Button, Footer, DataTable
 from textual.app import ComposeResult
-import json
-import os
-
-from demo_creator.screens.show_demo import ShowDemoScreen
-from demo_creator.utils import snapshot_latest_to_dated
+from datetime import datetime
+from demo_creator.screens.demo_creator import DemoCreatorScreen
 
 class MainMenuScreen(Screen):
     CSS_PATH = "../assets/main_menu.tcss"
 
     def compose(self) -> ComposeResult:
-        with Vertical(id="main_menu"):
+        """Create child widgets for the main menu screen."""
+        with Vertical(id="main_menu_container"):
+            # Title and user info
             yield Static("Main Menu", id="main_menu_title")
-            yield Static(f"User: {getattr(self.app, 'current_user', '')}", id="main_menu_user")
-            yield Static(f"Email: {getattr(self.app, 'current_email', '')}", id="main_menu_email")
-            yield Button("Create New Demo", id="create_demo_btn")
+            yield Static(f"User: {getattr(self.app, 'current_user', '')}", id="user_info")
+            yield Static(f"Email: {getattr(self.app, 'current_email', '')}", id="email_info")
+
+            # Buttons row
+            with Horizontal(id="action_buttons"):
+                yield Button("Create New Demo", id="create_demo_btn")
+                yield Button("Upload Demo", id="upload_demo_btn")
+                yield Button("Deploy DPG", id="deploy_dpg_btn", disabled=True)
+
+            # Label for demos list
             yield Static("Available Demos:", id="demo_list_title")
 
-            # Header row for the table:
-            with Horizontal(id="demo_table_header"):
-                yield Static("Demo Name", classes="demo_col demo_col_name")
-                yield Static("Description", classes="demo_col demo_col_desc")
-                yield Static("Last Updated", classes="demo_col demo_col_updated")
-                yield Static("Actions", classes="demo_col demo_col_actions")
+            # DataTable widget for demos
+            self.data_table = DataTable(id="demo_data_table")
+            self.data_table.cursor_type = "row"  # Crucial change: enable full row selection
+            yield self.data_table
 
-            for demo in self.get_demo_list():
-                demo_id = demo["demoId"]
-                name = demo["name"]
-                desc = demo["description"][:57] + "..." if len(demo.get("description", "")) > 60 else demo.get("description", "")
-                updated = demo.get("updated_at", "")
-                with Horizontal(classes="demo_row"):
-                    yield Static(name, classes="demo_col demo_col_name")
-                    yield Static(desc, classes="demo_col demo_col_desc")
-                    yield Static(updated, classes="demo_col demo_col_updated")
-                    yield Button("🔍", id=f"show_{demo_id}", classes="show_btn demo_col demo_col_actions")
-                    yield Button("✏️", id=f"edit_{demo_id}", classes="edit_btn demo_col demo_col_actions")
-                    yield Button("🗑️", id=f"delete_{demo_id}", classes="delete_btn demo_col demo_col_actions")
+            # Footer
+            yield Footer()
 
-        yield Footer()
+    def on_mount(self) -> None:
+        """Actions to perform when the screen is mounted."""
+        self.load_demo_list()
+        self.data_table.focus()  # Ensure the data table has keyboard focus
 
-    def get_demo_list(self):
+    def load_demo_list(self) -> None:
+        """Loads the list of demos into the DataTable."""
+        demos = self.get_demo_list()
+        self.data_table.clear(columns=True)
+
+        # Add columns
+        self.data_table.add_column("Demo Name", width=25)
+        self.data_table.add_column("Description", width=45)
+        self.data_table.add_column("Last Updated", width=28)
+        self.data_table.add_column("DPGs Required")
+
+        if not demos:
+            # Show placeholder row if no demos
+            self.data_table.add_row("No demos found.", "", "")
+            return
+
+        # Add each demo as a row; use demoId as row key for selection
+        for demo in demos:
+            name = demo.get("name", "")
+            desc = demo.get("description", "") or ""
+            if len(desc) > 60:
+                desc = desc[:57] + "..."
+            updated = demo.get("updated_at", "")
+            if updated:
+                try:
+                    dt = datetime.fromisoformat(updated.replace('Z', '+00:00'))
+                    updated_str = dt.strftime('%Y-%m-%d %H:%M')
+                except Exception:
+                    updated_str = updated
+            else:
+                updated_str = ""
+            tags = demo.get("tags", [])
+            if tags:
+                tag_chips = " ".join(
+                    f"[bold][bright_black][[/bright_black][/bold][bold][#228B22]{tag}[/#228B22][/bold][bold][bright_black]][/bright_black][/bold]"
+                    for tag in tags
+                )
+            else:
+                tag_chips = ""
+
+            self.data_table.add_row(name, desc, updated_str, tag_chips, key=demo["demoId"])
+
+    def get_demo_list(self) -> list:
+        """Fetches the list of demos from the metadata file, sorted by latest updated first."""
         metadata_path = os.path.join("demos", "latest", "metadata.json")
         if not os.path.exists(metadata_path):
             return []
-        with open(metadata_path, "r") as f:
-            metadata = json.load(f)
-        return [d for d in metadata.get("demos", []) if not d.get("deleted")]
+
+        try:
+            with open(metadata_path, "r") as f:
+                metadata = json.load(f)
+        except json.JSONDecodeError:
+            return []
+
+        demos = [d for d in metadata.get("demos", []) if not d.get("deleted")]
+
+        # Define key function for sorting by 'updated_at'
+        def date_key(demo):
+            val = demo.get("updated_at", "")
+            try:
+                # Replace 'Z' with '+00:00' for ISO8601 compatibility
+                return datetime.fromisoformat(val.replace("Z", "+00:00"))
+            except Exception:
+                return datetime.min  # fallback if date missing or invalid
+
+        # Sort by updated_at (latest first)
+        demos.sort(key=date_key, reverse=True)
+        return demos
+
+    async def on_data_table_row_selected(self, event: DataTable.RowSelected) -> None:
+        """
+        Called when a row is selected (Enter key, or double-click with mouse).
+        This event handler should now work correctly because cursor_type is 'row'.
+        """
+        demo_id = event.row_key
+        # Check for the placeholder row's key, which would be 'None'
+        if not demo_id or demo_id == "None":
+            return
+            
+        # Push the next screen with the selected demo's ID
+        from demo_creator.screens.DemoDetailScreen import DemoDetailScreen
+        self.app.push_screen(DemoDetailScreen(demo_id))
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id == "create_demo_btn":
+        """Handles button presses on the screen."""
+        btn_id = event.button.id
+        if btn_id == "create_demo_btn":
+            self.app.push_screen(DemoCreatorScreen())
+        elif btn_id == "upload_demo_btn":
             self.app.pop_screen()
-            self.app.show_demo_creator()
-        elif event.button.id.startswith("show_"):
-            demo_id = event.button.id.removeprefix("show_")
-            self.show_demo(demo_id)
-        elif event.button.id.startswith("edit_"):
-            demo_id = event.button.id.removeprefix("edit_")
-            self.edit_demo(demo_id)
-        elif event.button.id.startswith("delete_"):
-            demo_id = event.button.id.removeprefix("delete_")
-            self.delete_demo(demo_id)
-            self.refresh()  # reload UI to reflect deletion
+            self.app.show_upload_screen()
+        elif btn_id == "deploy_dpg_btn":
+            # Placeholder, no action for now
+            pass
 
-    def delete_demo(self, demo_id):
-        metadata_path = os.path.join("demos", "latest", "metadata.json")
-        if not os.path.exists(metadata_path):
-            return
-        with open(metadata_path, "r") as f:
-            metadata = json.load(f)
-        for d in metadata.get("demos", []):
-            if d["demoId"] == demo_id:
-                d["deleted"] = True
-                # Also remove the actual demo file from latest/
-                try:
-                    os.remove(os.path.join("demos", "latest", d["file_name"]))
-                except Exception:
-                    pass
-        with open(metadata_path, "w") as f:
-            json.dump(metadata, f, indent=2)
-        now = datetime.datetime.now()
-        date_str = now.strftime("%Y-%m-%d")
-        time_str = now.strftime("%H-%M-%S")
-        snapshot_latest_to_dated(date_str, time_str, latest_dir=os.path.join("demos", "latest"))
+    def reload(self):
+        self.load_demo_list()
+        self.data_table.focus()
