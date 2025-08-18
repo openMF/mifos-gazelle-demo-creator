@@ -1,0 +1,141 @@
+$accent: rgb(6, 100, 160);
+$accent-dark: rgb(2, 50, 80);
+$accent-light: rgb(220, 240, 255);
+$text: rgb(220, 220, 220);
+$text-muted: rgb(150, 150, 150);
+$background: rgb(15, 15, 20);
+$error: rgb(200, 60, 60);
+$button-bg: rgb(45, 55, 80);
+$button-text: rgb(230, 230, 230);
+$button-text-focus: rgb(255, 255, 255);
+$button-disabled-bg: rgb(40, 40, 50);
+$button-disabled-text: rgb(90, 90, 120);
+
+/* Main container */
+#deploy_dpg_container {
+    height: 100%;
+    width: 100%;
+    layout: vertical;
+    background: $background;
+    color: $text;
+    padding: 1 2;
+}
+
+/* Screen Title */
+#deploy_dpg_title {
+    min-height: 3;
+    content-align: center middle;
+    text-style: bold;
+    background: $accent-dark;
+    color: $accent-light;
+    margin-bottom: 1;
+}
+
+/* Top buttons row */
+#top_buttons_row {
+    layout: horizontal;
+    height: 3;
+    margin-bottom: 1;
+}
+#top_buttons_row Button {
+    margin-right: 2;
+    border: round $accent;
+    padding-left: 2;
+    padding-right: 2;
+    background: $button-bg;
+    color: $button-text;
+}
+#top_buttons_row Button:focus {
+    background: $accent;
+    color: $button-text-focus;
+    text-style: bold;
+}
+#top_buttons_row Button:disabled {
+    background: $button-disabled-bg;
+    color: $button-disabled-text;
+}
+
+/* Status label (for deploy/progress/errors) */
+#status_label {
+    height: 1;
+    margin-bottom: 1;
+    padding-left: 1;
+}
+
+/* Scroll container for config */
+#deploy_config_scroll {
+    height: 1fr;
+    layout: vertical;
+    overflow-y: auto;
+    padding: 1 2;
+    border: solid $accent;
+    background: $background;
+}
+
+/* Section header styling: visually distinct */
+.section_header {
+    color: $accent-light;
+    background: $accent-dark;
+    margin-top: 2;
+    margin-bottom: 1;
+    min-height: 3;
+    padding-left: 2;
+    content-align: center middle;
+    text-style: bold;
+}
+
+/* Horizontal row for fields */
+.ini_row {
+    layout: horizontal;
+    align: center middle;
+    min-height: 3;
+    height: auto;
+    margin-bottom: 1;
+    border: solid $accent-dark;
+    background: $background;
+}
+
+.label {
+    min-width: 24;
+    max-width: 36;
+    min-height: 3;
+    text-style: bold;
+    color: $text;
+    padding-left: 1;
+    padding-right: 2;
+    content-align: center middle;
+}
+
+.ini_value {
+    color: $text-muted;
+    min-width: 24;
+    max-width: 60;
+    min-height: 3;
+    content-align: center middle;
+}
+
+.ini_input, Input {
+    border: round $accent;
+    padding-left: 1;
+    padding-right: 1;
+    background: $button-bg;
+    color: $button-text;
+    min-width: 28;
+    max-width: 68;
+    content-align: left middle;
+    margin-bottom: 1;
+}
+.ini_input:focus {
+    background: $accent-dark;
+    color: $button-text-focus;
+    border: round $accent-light;
+    text-style: bold;
+}
+
+.error_message {
+    color: $error;
+}
+
+Footer {
+    height: 1;
+}

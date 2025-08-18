@@ -6,6 +6,7 @@ from textual.widgets import Static, Button, Footer, DataTable
 from textual.app import ComposeResult
 from datetime import datetime
 from demo_creator.screens.demo_creator import DemoCreatorScreen
+from demo_creator.screens.deploy_dpg import DeployDPGScreen
 
 class MainMenuScreen(Screen):
     CSS_PATH = "../assets/main_menu.tcss"
@@ -22,7 +23,7 @@ class MainMenuScreen(Screen):
             with Horizontal(id="action_buttons"):
                 yield Button("Create New Demo", id="create_demo_btn")
                 yield Button("Upload Demo", id="upload_demo_btn")
-                yield Button("Deploy DPG", id="deploy_dpg_btn", disabled=True)
+                yield Button("Deploy DPG", id="deploy_dpg_btn")
 
             # Label for demos list
             yield Static("Available Demos:", id="demo_list_title")
@@ -132,8 +133,7 @@ class MainMenuScreen(Screen):
             self.app.pop_screen()
             self.app.show_upload_screen()
         elif btn_id == "deploy_dpg_btn":
-            # Placeholder, no action for now
-            pass
+            self.app.push_screen(DeployDPGScreen())
 
     def reload(self):
         self.load_demo_list()
