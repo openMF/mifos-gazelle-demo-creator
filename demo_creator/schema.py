@@ -66,3 +66,50 @@ metadata_schema = {
         }
     }
 }
+
+DPG_DEFAULT_CONFIG = {
+    "general": {
+        "mode": "deploy",
+        "GAZELLE_DOMAIN": "mifos.gazelle.test"
+    },
+    "environment": {
+        "user": "yash-sharma"
+    },
+    "mysql": {
+        "MYSQL_SERVICE_NAME": "mysql",
+        "MYSQL_SERVICE_PORT": "3306",
+        "LOCAL_PORT": "3307",
+        "MAX_WAIT_SECONDS": "60",
+        "MYSQL_HOST": "127.0.0.1"
+    },
+    "infra": {
+        "enabled": "false",
+        "INFRA_NAMESPACE": "infra",
+        "INFRA_RELEASE_NAME": "infra"
+    },
+    "mifosx": {
+        "enabled": "true",
+        "MIFOSX_NAMESPACE": "mifosx",
+        "MIFOSX_REPO_DIR": "mifosx",
+        "MIFOSX_BRANCH": "gazelle-1.1.0",
+        "MIFOSX_REPO_LINK": "https://github.com/openMF/mifosx-docker.git"
+    },
+    "vnext": {
+        "enabled": "true",
+        "VNEXTBRANCH": "beta1",
+        "VNEXTREPO_DIR": "vnext",
+        "VNEXT_NAMESPACE": "vnext",
+        "VNEXT_REPO_LINK": "https://github.com/mojaloop/platform-shared-tools.git"
+    },
+    "phee": {
+        "enabled": "true",
+        "PHBRANCH": "master",
+        "PHREPO_DIR": "phlabs",
+        "PH_NAMESPACE": "paymenthub",
+        "PH_RELEASE_NAME": "phee",
+        "PH_REPO_LINK": "https://github.com/openMF/ph-ee-env-labs.git",
+        "PH_EE_ENV_TEMPLATE_REPO_LINK": "https://github.com/openMF/ph-ee-env-template.git",
+        "PH_EE_ENV_TEMPLATE_REPO_BRANCH": "v1.13.0-gazelle",
+        "PH_EE_ENV_TEMPLATE_REPO_DIR": "ph_template"
+    }
+}
