@@ -4,26 +4,77 @@ import re
 import shutil
 import glob
 import os
+import threading
 import json
 from datetime import datetime, timezone
 from demo_creator.schema import metadata_schema
 from jsonschema import validate, ValidationError
 
-def upload_to_jfrog(username: str, password: str, url: str, filepath: str = "demos/demo_output.json") -> tuple[bool, str]:
-    try:
-        with open(filepath, "rb") as f:
-            response = requests.put(
-                url,
-                data=f,
-                auth=HTTPBasicAuth(username, password),
-                timeout=10
-            )
-        if response.status_code in (200, 201):
-            return True, "✅ Upload successful!"
-        else:
-            return False, f"❌ Upload failed: {response.status_code} - {response.text.strip()}"
-    except Exception as e:
-        return False, f"❌ Error: {e}"
+def upload_to_jfrog(
+    username: str,
+    password: str,
+    repo_url: str,
+    folder: str = "demos/",
+    progress_callback=None,
+    cancel_flag=None
+) -> tuple[bool, str]:
+    files = [f for f in glob.glob(os.path.join(folder, "**"), recursive=True) if os.path.isfile(f)]
+    if not files:
+        return False, f"❌ No files found in {folder}"
+
+    report = []
+    overall_success = True
+
+    for i, file_path in enumerate(files, 1):
+        if cancel_flag and cancel_flag():
+            report.append(f"⏩ Cancelled by user.")
+            overall_success = False
+            break
+
+        rel_path = os.path.relpath(file_path, folder)
+        upload_url = repo_url.rstrip("/") + "/" + rel_path.replace("\\", "/")
+        try:
+            with open(file_path, "rb") as f:
+                response = requests.put(
+                    upload_url,
+                    data=f,
+                    auth=HTTPBasicAuth(username, password),
+                    timeout=30
+                )
+            if response.status_code in (200, 201):
+                msg = f"✅ {rel_path}: OK"
+                report.append(msg)
+                success = True
+            else:
+                msg = f"❌ {rel_path}: {response.status_code} - {response.text.strip()}"
+                report.append(msg)
+                success = False
+                overall_success = False
+        except Exception as e:
+            msg = f"❌ {rel_path}: Error - {e}"
+            report.append(msg)
+            success = False
+            overall_success = False
+
+        if progress_callback:
+            progress_callback(rel_path, success, msg)
+
+    status = "\n".join(report)
+    return overall_success, status
+
+def threaded_upload_to_jfrog(
+    username: str, password: str, repo_url: str, folder: str = "demos/",
+    ui_callback=None, cancel_flag=None
+):
+    def _run():
+        success, status = upload_to_jfrog(
+            username, password, repo_url, folder,
+            cancel_flag=cancel_flag
+        )
+        if ui_callback:
+            ui_callback(success, status)
+    t = threading.Thread(target=_run, daemon=True)
+    t.start()
 
 def get_demo_file_name(demo_name: str) -> str:
     safe_name = demo_name.strip().lower()
@@ -55,13 +106,12 @@ def save_metadata(metadata):
 def update_metadata(demo_data, file_name, username):
     metadata = load_metadata()
     now = datetime.now(timezone.utc).replace(microsecond=0)
-    now_str = now.isoformat().replace("+00:00", "Z")    # CORRECT FORMAT FOR ALL FIELDS
+    now_str = now.isoformat().replace("+00:00", "Z")
     demo_id = demo_data["demoId"]
     name = demo_data["demoName"]
     description = demo_data.get("demoDescription", "")
-    steps_count = len(demo_data["steps"])   
+    steps_count = len(demo_data["steps"])
 
-    # Try to find by demoId, else new
     entry = None
     for d in metadata["demos"]:
         if d["demoId"] == demo_id:
@@ -69,26 +119,25 @@ def update_metadata(demo_data, file_name, username):
             break
 
     if entry:
-        # Update fields
         entry["name"] = name
         entry["file_name"] = file_name
         entry["description"] = description
         entry["steps_count"] = steps_count
-        entry["updated_at"] = now_str      # USE THE STRING
+        entry["updated_at"] = now_str
         entry["last_modified_by"] = username
         entry["deleted"] = False
         entry["version"] += 1
         entry["tags"] = demo_data.get("tags", [])
     else:
         entry = {
-            "demoId": demo_id,  # Store demoId in metadata as well!
+            "demoId": demo_id,
             "name": name,
             "file_name": file_name,
             "description": description,
             "version": 1,
             "steps_count": steps_count,
-            "created_at": now_str,          # USE THE STRING
-            "updated_at": now_str,          # USE THE STRING
+            "created_at": now_str,
+            "updated_at": now_str,
             "created_by": username,
             "last_modified_by": username,
             "deleted": False,
@@ -96,11 +145,10 @@ def update_metadata(demo_data, file_name, username):
         }
         metadata["demos"].append(entry)
 
-    # 🚩 Validate the metadata dict before saving
     try:
         validate(instance=metadata, schema=metadata_schema)
     except ValidationError as ve:
         print(f"[red]❌ Metadata validation error: {ve}")
-        raise       # Optionally: handle more gracefully in production
+        raise
 
     save_metadata(metadata)
