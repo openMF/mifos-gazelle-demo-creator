@@ -1,0 +1,104 @@
+$accent: rgb(6, 100, 160);
+$accent-dark: rgb(2, 50, 80);
+$accent-light: rgb(220, 240, 255);
+$text: rgb(220, 220, 220);
+$text-muted: rgb(150, 150, 150);
+$background: rgb(15, 15, 20);
+$error: rgb(200, 60, 60);
+$button-bg: rgb(45, 55, 80);
+$button-text: rgb(230, 230, 230);
+$button-text-focus: rgb(255, 255, 255);
+$button-disabled-bg: rgb(40, 40, 50);
+$button-disabled-text: rgb(90, 90, 120);
+
+/* Main container */
+#logs_screen_container {
+    height: 100%;
+    width: 100%;
+    layout: vertical;
+    background: $background;
+    color: $text;
+    padding: 1 2;
+}
+
+/* Logs Screen Title */
+#logs_title {
+    min-height: 3;
+    content-align: center middle;
+    text-style: bold;
+    background: $accent-dark;
+    color: $accent-light;
+    margin-bottom: 1;
+}
+
+/* Top row (Back button, status) */
+#logs_top_row {
+    layout: horizontal;
+    height: 3;
+    margin-bottom: 1;
+}
+
+#logs_top_row Button {
+    margin-right: 2;
+    border: round $accent;
+    padding-left: 2;
+    padding-right: 2;
+    background: $button-bg;
+    color: $button-text;
+}
+#logs_top_row Button:focus {
+    background: $accent;
+    color: $button-text-focus;
+    text-style: bold;
+}
+#logs_top_row Button:disabled {
+    background: $button-disabled-bg;
+    color: $button-disabled-text;
+}
+
+/* Status label for deploy/progress/errors */
+#logs_status {
+    height: 1;
+    min-width: 16;
+    margin-left: 2;
+    padding-left: 1;
+    color: $accent-light;
+}
+
+/* Scrollable log panel */
+#logs_scroll {
+    height: 1fr;
+    overflow-y: auto;
+    background: $background;
+    color: $text-muted;
+    border: solid $accent-dark;
+    padding: 1 2;
+    /* To mimic config look, add border, padding, and monospacing */
+}
+
+/* Error log lines, if formatted */
+.error_message {
+    color: $error;
+    text-style: bold;
+}
+
+/* If you want highlighted log lines (not required, but here's a convention) */
+.success_message {
+    color: $accent-light;
+    text-style: bold;
+}
+.info_message {
+    color: $accent;
+    text-style: bold;
+}
+
+.log-info { color: $accent-light; background: $background; }
+.log-warn { color: $error; background: $background; text-style: bold; }
+.log-error { color: $error; background: $background; text-style: bold underline; }
+
+/* Footer style for consistency */
+Footer {
+    height: 1;
+    background: $accent-dark;
+    color: $accent-light;
+}
