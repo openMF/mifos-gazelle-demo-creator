@@ -70,7 +70,8 @@ metadata_schema = {
 DPG_DEFAULT_CONFIG = {
     "general": {
         "mode": "deploy",
-        "GAZELLE_DOMAIN": "mifos.gazelle.test"
+        "GAZELLE_DOMAIN": "mifos.gazelle.test",
+        "GAZELLE_VERSION": "1.1.0"
     },
     "environment": {
         "user": "yash-sharma"
@@ -109,7 +110,7 @@ DPG_DEFAULT_CONFIG = {
         "PH_RELEASE_NAME": "phee",
         "PH_REPO_LINK": "https://github.com/openMF/ph-ee-env-labs.git",
         "PH_EE_ENV_TEMPLATE_REPO_LINK": "https://github.com/openMF/ph-ee-env-template.git",
-        "PH_EE_ENV_TEMPLATE_REPO_BRANCH": "v1.13.0-gazelle",
+        "PH_EE_ENV_TEMPLATE_REPO_BRANCH": "v1.13.0-gazelle-1.1.0",
         "PH_EE_ENV_TEMPLATE_REPO_DIR": "ph_template"
     }
 }
