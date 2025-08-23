@@ -10,9 +10,8 @@ $button-text: rgb(230, 230, 230);
 $button-text-focus: rgb(255, 255, 255);
 $button-disabled-bg: rgb(40, 40, 50);
 $button-disabled-text: rgb(90, 90, 120);
-
 /* Main container */
-#deploy_dpg_container {
+#dpg_container {
     height: 100%;
     width: 100%;
     layout: vertical;
@@ -20,9 +19,8 @@ $button-disabled-text: rgb(90, 90, 120);
     color: $text;
     padding: 1 2;
 }
-
 /* Screen Title */
-#deploy_dpg_title {
+#dpg_title {
     min-height: 3;
     content-align: center middle;
     text-style: bold;
@@ -30,14 +28,13 @@ $button-disabled-text: rgb(90, 90, 120);
     color: $accent-light;
     margin-bottom: 1;
 }
-
 /* Top buttons row */
-#top_buttons_row {
+#dpg_top_buttons_row {
     layout: horizontal;
     height: 3;
     margin-bottom: 1;
 }
-#top_buttons_row Button {
+#dpg_top_buttons_row Button {
     margin-right: 2;
     border: round $accent;
     padding-left: 2;
@@ -45,25 +42,23 @@ $button-disabled-text: rgb(90, 90, 120);
     background: $button-bg;
     color: $button-text;
 }
-#top_buttons_row Button:focus {
+#dpg_top_buttons_row Button:focus {
     background: $accent;
     color: $button-text-focus;
     text-style: bold;
 }
-#top_buttons_row Button:disabled {
+#dpg_top_buttons_row Button:disabled {
     background: $button-disabled-bg;
     color: $button-disabled-text;
 }
-
 /* Status label (for deploy/progress/errors) */
-#status_label {
+#dpg_status_label {
     height: 1;
     margin-bottom: 1;
     padding-left: 1;
 }
-
 /* Scroll container for config */
-#deploy_config_scroll {
+#dpg_config_scroll {
     height: 1fr;
     layout: vertical;
     overflow-y: auto;
@@ -71,9 +66,8 @@ $button-disabled-text: rgb(90, 90, 120);
     border: solid $accent;
     background: $background;
 }
-
 /* Section header styling: visually distinct */
-.section_header {
+.dpg_section_header {
     color: $accent-light;
     background: $accent-dark;
     margin-top: 2;
@@ -83,9 +77,8 @@ $button-disabled-text: rgb(90, 90, 120);
     content-align: center middle;
     text-style: bold;
 }
-
 /* Horizontal row for fields */
-.ini_row {
+.dpg_ini_row {
     layout: horizontal;
     align: center middle;
     min-height: 3;
@@ -94,8 +87,7 @@ $button-disabled-text: rgb(90, 90, 120);
     border: solid $accent-dark;
     background: $background;
 }
-
-.label {
+.dpg_label {
     min-width: 24;
     max-width: 36;
     min-height: 3;
@@ -105,16 +97,15 @@ $button-disabled-text: rgb(90, 90, 120);
     padding-right: 2;
     content-align: center middle;
 }
-
-.ini_value {
+.dpg_ini_value {
     color: $text-muted;
     min-width: 24;
     max-width: 60;
     min-height: 3;
     content-align: center middle;
 }
-
-.ini_input, Input {
+/* Inputs – only in DeployDPGScreen! */
+.dpg_ini_input {
     border: round $accent;
     padding-left: 1;
     padding-right: 1;
@@ -125,17 +116,15 @@ $button-disabled-text: rgb(90, 90, 120);
     content-align: left middle;
     margin-bottom: 1;
 }
-.ini_input:focus {
+.dpg_ini_input:focus {
     background: $accent-dark;
     color: $button-text-focus;
     border: round $accent-light;
     text-style: bold;
 }
-
-.error_message {
+.dpg_error_message {
     color: $error;
 }
-
 Footer {
     height: 1;
 }

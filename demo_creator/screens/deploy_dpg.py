@@ -7,10 +7,8 @@ from textual.app import ComposeResult
 from demo_creator.screens.ConfirmDialogScreen import ConfirmDialogScreen
 from demo_creator.schema import DPG_DEFAULT_CONFIG
 from demo_creator.screens.DeployLogsScreen import DeployLogsScreen
+from textual.binding import Binding
 
-# =========================
-# Artifact folder setup
-# =========================
 GAZELLE_ARTIFACTS_DIR = os.path.abspath("gazelle_artifacts")
 GAZELLE_REPO_DIR = os.path.join(GAZELLE_ARTIFACTS_DIR, "mifos-gazelle")
 INI_OUTPUT_FILENAME = os.path.join(GAZELLE_ARTIFACTS_DIR, "mifos-gazelle-config.ini")
@@ -30,6 +28,9 @@ def ini_text(config: dict) -> str:
 
 class DeployDPGScreen(Screen):
     CSS_PATH = "../assets/deploy_dpg.tcss"
+    BINDINGS = [
+        Binding("escape", "go_back", "Back", show=True),
+    ]
 
     def __init__(self):
         super().__init__()
@@ -38,14 +39,15 @@ class DeployDPGScreen(Screen):
         self.inputs = {}
 
     def compose(self) -> ComposeResult:
-        with Vertical(id="deploy_dpg_container"):
-            yield Static("Deploy DPGs", id="deploy_dpg_title")
-            with Horizontal(id="top_buttons_row"):
-                yield Button("Edit", id="edit_btn")
-                yield Button("Deploy", id="deploy_btn", disabled=False)
-                yield Button("Cancel", id="cancel_btn", disabled=True)
-            yield Static("", id="status_label")
-            yield ScrollableContainer(id="deploy_config_scroll")
+        with Vertical(id="dpg_container"):
+            yield Static("Deploy DPGs", id="dpg_title")
+            with Horizontal(id="dpg_top_buttons_row"):
+                yield Button("Edit", id="dpg_edit_btn")
+                yield Button("Save", id="dpg_save_btn", disabled=True)
+                yield Button("Cancel", id="dpg_cancel_btn", disabled=True)
+                yield Button("Deploy", id="dpg_deploy_btn", disabled=False)
+            yield Static("", id="dpg_status_label")
+            yield ScrollableContainer(id="dpg_config_scroll")
             yield Footer()
 
     def on_mount(self) -> None:
@@ -53,60 +55,63 @@ class DeployDPGScreen(Screen):
 
     def render_view(self):
         self.edit_mode = False
-        self.query_one("#edit_btn", Button).disabled = False
-        self.query_one("#deploy_btn", Button).disabled = False
-        self.query_one("#cancel_btn", Button).disabled = True
+        self.query_one("#dpg_edit_btn", Button).disabled = False
+        self.query_one("#dpg_save_btn", Button).disabled = True
+        self.query_one("#dpg_cancel_btn", Button).disabled = True
+        self.query_one("#dpg_deploy_btn", Button).disabled = False
 
-        scroll = self.query_one("#deploy_config_scroll", ScrollableContainer)
+        scroll = self.query_one("#dpg_config_scroll", ScrollableContainer)
         scroll.remove_children()
 
         for section, params in self.config.items():
-            scroll.mount(Static(f"{section}", classes="section_header"))
+            scroll.mount(Static(f"{section}", classes="dpg_section_header"))
             for key, val in params.items():
                 row = Horizontal(
-                    Static(f"{key}:", classes="label"),
-                    Static(str(val), classes="ini_value"),
-                    classes="ini_row"
+                    Static(f"{key}:", classes="dpg_label"),
+                    Static(str(val), classes="dpg_ini_value"),
+                    classes="dpg_ini_row"
                 )
                 scroll.mount(row)
         scroll.refresh()
 
     def render_edit(self):
         self.edit_mode = True
-        self.query_one("#edit_btn", Button).disabled = True
-        self.query_one("#deploy_btn", Button).disabled = False
-        self.query_one("#cancel_btn", Button).disabled = False
+        self.query_one("#dpg_edit_btn", Button).disabled = True
+        self.query_one("#dpg_save_btn", Button).disabled = False
+        self.query_one("#dpg_cancel_btn", Button).disabled = False
+        self.query_one("#dpg_deploy_btn", Button).disabled = True
 
-        scroll = self.query_one("#deploy_config_scroll", ScrollableContainer)
+        scroll = self.query_one("#dpg_config_scroll", ScrollableContainer)
         scroll.remove_children()
         self.inputs = {}
 
         for section, params in self.config.items():
-            scroll.mount(Static(f"{section}", classes="section_header"))
+            scroll.mount(Static(f"{section}", classes="dpg_section_header"))
             self.inputs[section] = {}
             for key, val in params.items():
-                inp = Input(value=str(val), classes="ini_input")
+                inp = Input(value=str(val), classes="dpg_ini_input")
                 self.inputs[section][key] = inp
                 row = Horizontal(
-                    Static(f"{key}:", classes="label"),
+                    Static(f"{key}:", classes="dpg_label"),
                     inp,
-                    classes="ini_row"
+                    classes="dpg_ini_row"
                 )
                 scroll.mount(row)
         scroll.refresh()
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         btn_id = event.button.id
-        if btn_id == "edit_btn":
+        if btn_id == "dpg_edit_btn":
             self.render_edit()
-            self.query_one("#status_label", Static).update("")
-        elif btn_id == "deploy_btn":
-            if self.edit_mode:
-                self.save_edits()
-            self.ask_deploy_confirmation()
-        elif btn_id == "cancel_btn":
+            self.query_one("#dpg_status_label", Static).update("")
+        elif btn_id == "dpg_save_btn":
+            self.save_edits()
+        elif btn_id == "dpg_cancel_btn":
             self.render_view()
-            self.query_one("#status_label", Static).update("Edit cancelled.")
+            self.query_one("#dpg_status_label", Static).update("Edit cancelled.")
+        elif btn_id == "dpg_deploy_btn":
+            if not self.edit_mode:
+                self.ask_deploy_confirmation()
 
     def save_edits(self):
         new_config = {}
@@ -116,12 +121,11 @@ class DeployDPGScreen(Screen):
                 new_config[section][key] = inp.value.strip()
         self.config = new_config
         self.render_view()
-        self.query_one("#status_label", Static).update("[green]Config updated. Ready to deploy.")
+        self.query_one("#dpg_status_label", Static).update("[green]Config updated. Ready to deploy.")
 
     def ask_deploy_confirmation(self):
         def on_confirm():
             ini_path = self.write_config_ini()
-            # IMPORTANT: use the new logs screen
             self.app.push_screen(
                 DeployLogsScreen(
                     ini_path=ini_path,
@@ -130,11 +134,11 @@ class DeployDPGScreen(Screen):
                     branch_name=GAZELLE_BRANCH_NAME,
                     deploy_cmd_template=GAZELLE_DEPLOY_CMD_TMPL,
                     artifact_dir=GAZELLE_ARTIFACTS_DIR,
-                    prev_screen=self,  # for back navigation
+                    prev_screen=self,
                 )
             )
         def on_cancel():
-            self.query_one("#status_label", Static).update("Deployment cancelled.")
+            self.query_one("#dpg_status_label", Static).update("Deployment cancelled.")
 
         dialog = ConfirmDialogScreen(
             "Proceed to deploy DPGs with these settings?\nThis will clone the Gazelle repo (if needed) and start deployment.",
@@ -144,41 +148,44 @@ class DeployDPGScreen(Screen):
         self.app.push_screen(dialog)
 
     def write_config_ini(self) -> str:
-        # Ensure the artifacts directory exists
         os.makedirs(GAZELLE_ARTIFACTS_DIR, exist_ok=True)
         out_path = INI_OUTPUT_FILENAME
         with open(out_path, "w") as f:
             f.write(ini_text(self.config))
-        self.query_one("#status_label", Static).update(f"Wrote config file: {out_path}")
+        self.query_one("#dpg_status_label", Static).update(f"Wrote config file: {out_path}")
         return out_path
 
     def deploy_dpgs(self, ini_path):
         try:
-            # Ensure the artifacts directory exists
             os.makedirs(GAZELLE_ARTIFACTS_DIR, exist_ok=True)
             if not os.path.exists(GAZELLE_REPO_DIR):
-                self.query_one("#status_label", Static).update("Cloning mifos-gazelle...")
+                self.query_one("#dpg_status_label", Static).update("Cloning mifos-gazelle...")
                 subprocess.run([
                     "git", "clone", "--branch", GAZELLE_BRANCH_NAME, GAZELLE_GIT_URL, GAZELLE_REPO_DIR
                 ], check=True)
-                self.query_one("#status_label", Static).update("[green]Repo cloned.")
+                self.query_one("#dpg_status_label", Static).update("[green]Repo cloned.")
 
-            self.query_one("#status_label", Static).update("Starting deployment (this may take a while)...")
+            self.query_one("#dpg_status_label", Static).update("Starting deployment (this may take a while)...")
             cmd = [a if a != "{ini_path}" else ini_path for a in GAZELLE_DEPLOY_CMD_TMPL]
             proc = subprocess.run(
                 cmd,
-                cwd=GAZELLE_REPO_DIR,  # repo dir where run.sh is
+                cwd=GAZELLE_REPO_DIR,
                 capture_output=True,
                 text=True,
                 timeout=1800
             )
             if proc.returncode == 0:
-                self.query_one("#status_label", Static).update(
+                self.query_one("#dpg_status_label", Static).update(
                     f"[green]Deployment successful!\n{proc.stdout[:350]}"
                 )
             else:
-                self.query_one("#status_label", Static).update(
+                self.query_one("#dpg_status_label", Static).update(
                     f"[red]Deployment failed:\n{proc.stderr[:350]}"
                 )
         except Exception as e:
-            self.query_one("#status_label", Static).update(f"[red]Deployment error: {e}")
+            self.query_one("#dpg_status_label", Static).update(f"[red]Deployment error: {e}")
+
+    def action_go_back(self) -> None:
+        self.app.pop_screen()
+        if hasattr(self.app.screen_stack[-1], "reload"):
+            self.app.screen_stack[-1].reload()
