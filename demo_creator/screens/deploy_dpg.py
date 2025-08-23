@@ -1,5 +1,6 @@
 import os
 import subprocess
+import configparser
 from textual.screen import Screen
 from textual.containers import Vertical, Horizontal, ScrollableContainer
 from textual.widgets import Static, Input, Button, Footer
@@ -26,6 +27,22 @@ def ini_text(config: dict) -> str:
         lines.append('')
     return "\n".join(lines)
 
+def parse_ini_to_dict(ini_path):
+    config = configparser.ConfigParser()
+    config.read(ini_path)
+    out = {}
+    for section in config.sections():
+        out[section] = dict(config.items(section))
+    return out
+
+def save_dict_to_ini(config_dict, ini_path):
+    config = configparser.ConfigParser()
+    for section, params in config_dict.items():
+        config[section] = {str(k): str(v) for k, v in params.items()}
+    os.makedirs(os.path.dirname(ini_path), exist_ok=True)
+    with open(ini_path, "w") as f:
+        config.write(f)
+
 class DeployDPGScreen(Screen):
     CSS_PATH = "../assets/deploy_dpg.tcss"
     BINDINGS = [
@@ -34,9 +51,17 @@ class DeployDPGScreen(Screen):
 
     def __init__(self):
         super().__init__()
-        self.config = {section: dict(params) for section, params in DPG_DEFAULT_CONFIG.items()}
+        self.config = self.load_or_default_config()
         self.edit_mode = False
         self.inputs = {}
+
+    def load_or_default_config(self):
+        if os.path.exists(INI_OUTPUT_FILENAME):
+            try:
+                return parse_ini_to_dict(INI_OUTPUT_FILENAME)
+            except Exception as e:
+                print(f"Could not parse config INI file, loading defaults. Error: {e}")
+        return {section: dict(params) for section, params in DPG_DEFAULT_CONFIG.items()}
 
     def compose(self) -> ComposeResult:
         with Vertical(id="dpg_container"):
@@ -51,6 +76,7 @@ class DeployDPGScreen(Screen):
             yield Footer()
 
     def on_mount(self) -> None:
+        self.config = self.load_or_default_config()
         self.render_view()
 
     def render_view(self):
@@ -120,12 +146,13 @@ class DeployDPGScreen(Screen):
             for key, inp in fields.items():
                 new_config[section][key] = inp.value.strip()
         self.config = new_config
+        save_dict_to_ini(self.config, INI_OUTPUT_FILENAME)
         self.render_view()
-        self.query_one("#dpg_status_label", Static).update("[green]Config updated. Ready to deploy.")
+        self.query_one("#dpg_status_label", Static).update(f"[green]Config updated and saved to INI file: {INI_OUTPUT_FILENAME}")
 
     def ask_deploy_confirmation(self):
         def on_confirm():
-            ini_path = self.write_config_ini()
+            ini_path = INI_OUTPUT_FILENAME  # Always use the latest, saved file
             self.app.push_screen(
                 DeployLogsScreen(
                     ini_path=ini_path,
@@ -146,14 +173,6 @@ class DeployDPGScreen(Screen):
             on_cancel=on_cancel
         )
         self.app.push_screen(dialog)
-
-    def write_config_ini(self) -> str:
-        os.makedirs(GAZELLE_ARTIFACTS_DIR, exist_ok=True)
-        out_path = INI_OUTPUT_FILENAME
-        with open(out_path, "w") as f:
-            f.write(ini_text(self.config))
-        self.query_one("#dpg_status_label", Static).update(f"Wrote config file: {out_path}")
-        return out_path
 
     def deploy_dpgs(self, ini_path):
         try:
