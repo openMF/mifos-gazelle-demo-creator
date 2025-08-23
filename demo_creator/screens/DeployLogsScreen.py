@@ -26,6 +26,7 @@ class DeployLogsScreen(Screen):
         self.artifact_dir = artifact_dir
         self.prev_screen = prev_screen
         self.log_lines = []
+        self.log_buffer = []
         self.process_finished = False
         self.process_ok = None
         self._deploy_proc = None
@@ -43,7 +44,7 @@ class DeployLogsScreen(Screen):
     def on_mount(self):
         self.log_widget = self.query_one("#logs_text", Static)
         self.status_widget = self.query_one("#logs_status", Static)
-        self.set_interval(0.1, self._update_logs_ui)
+        self.set_interval(0.5, self._update_logs_ui)  # Only refresh UI every 0.5s
         asyncio.create_task(self.run_deploy_job())
 
     async def run_deploy_job(self):
@@ -53,7 +54,7 @@ class DeployLogsScreen(Screen):
             clone_msg = f"[dim]Cloning repo: {self.git_url} (branch: {self.branch_name})"
             already_msg = "[dim]Repo already exists, skipping clone."
             if not os.path.exists(self.repo_dir):
-                await self._log(clone_msg)
+                await self._log_buffered(clone_msg)
                 self._deploy_proc = await asyncio.create_subprocess_exec(
                     "git", "clone", "--branch", self.branch_name, self.git_url, self.repo_dir,
                     stdout=asyncio.subprocess.PIPE,
@@ -61,17 +62,17 @@ class DeployLogsScreen(Screen):
                 )
                 await self._stream_subprocess(self._deploy_proc)
                 if self._deploy_proc.returncode != 0:
-                    await self._log(f"[red]Repo clone failed!")
+                    await self._log_buffered(f"[red]Repo clone failed!")
                     self.status_widget.update("[red]Clone failed.")
                     self.process_ok = False
                     self.process_finished = True
                     return
-                await self._log("[green]Repo cloned successfully!")
+                await self._log_buffered("[green]Repo cloned successfully!")
             else:
-                await self._log(already_msg)
+                await self._log_buffered(already_msg)
 
             # ---- DEPLOY STEP ----
-            await self._log("[dim]Starting deployment process...")
+            await self._log_buffered("[dim]Starting deployment process...")
             cmd = [a if a != "{ini_path}" else self.ini_path for a in self.deploy_cmd_template]
             self._deploy_proc = await asyncio.create_subprocess_exec(
                 *cmd,
@@ -81,16 +82,16 @@ class DeployLogsScreen(Screen):
             )
             await self._stream_subprocess(self._deploy_proc)
             if self._deploy_proc.returncode == 0:
-                await self._log(f"[green]Deployment successful!")
+                await self._log_buffered(f"[green]Deployment successful!")
                 self.status_widget.update("[green]Deployment finished.")
                 self.process_ok = True
             else:
-                await self._log(f"[red]Deployment failed [{self._deploy_proc.returncode}].")
+                await self._log_buffered(f"[red]Deployment failed [{self._deploy_proc.returncode}].")
                 self.status_widget.update("[red]Deployment failed.")
                 self.process_ok = False
 
         except Exception as e:
-            await self._log(f"[red]Error: {e}")
+            await self._log_buffered(f"[red]Error: {e}")
             self.status_widget.update(f"[red]Error: {e}")
             self.process_ok = False
         self.process_finished = True
@@ -102,15 +103,23 @@ class DeployLogsScreen(Screen):
                 break
             # Strip ANSI color codes from every log line
             line = strip_ansi(line.decode().rstrip())
-            await self._log(line)
+            await self._log_buffered(line)
         await proc.wait()
 
-    async def _log(self, line: str):
-        self.log_lines.append(line)
-        if len(self.log_lines) > 500:
-            self.log_lines = self.log_lines[-500:]
+    async def _log_buffered(self, line: str):
+        """Buffer log lines for batch UI updating."""
+        self.log_buffer.append(line)
+        # Optionally flush buffer if it grows too large
+        if len(self.log_buffer) > 200:
+            self._update_logs_ui()
 
     def _update_logs_ui(self):
+        """Flush buffered logs to main lines, trim, and update the UI."""
+        if self.log_buffer:
+            self.log_lines.extend(self.log_buffer)
+            self.log_buffer = []
+        # Show only last 300 lines for performance
+        self.log_lines = self.log_lines[-300:]
         content = "\n".join(self.log_lines)
         self.log_widget.update(content)
 
@@ -131,19 +140,17 @@ class DeployLogsScreen(Screen):
                     self._deploy_proc.send_signal(signal.SIGINT)
                 else:
                     self._deploy_proc.terminate()
-                # Inform user that cancel was requested, cleanup starting
                 self.status_widget.update("[red]Deployment cancelled by user.[yellow] Cleanup in progress...")
-                asyncio.create_task(self._log("[red]Deployment cancelled by user.[yellow] Cleanup in progress..."))
+                asyncio.create_task(self._log_buffered("[red]Deployment cancelled by user.[yellow] Cleanup in progress..."))
 
                 # Kick off a cleanup monitor that waits for script exit
                 async def wait_for_cleanup(proc, screen):
                     await proc.wait()  # Wait for script to finish (including its cleanup)
                     screen.status_widget.update("[green]Cleanup done. Deployment stopped.")
-                    await screen._log("[green]Cleanup done. Deployment stopped.")
+                    await screen._log_buffered("[green]Cleanup done. Deployment stopped.")
 
                 asyncio.create_task(wait_for_cleanup(self._deploy_proc, self))
                 self.process_finished = True
             except Exception as e:
                 self.status_widget.update(f"[red]Could not stop process: {e}")
-                asyncio.create_task(self._log(f"[red]Could not stop process: {e}"))
-
+                asyncio.create_task(self._log_buffered(f"[red]Could not stop process: {e}"))

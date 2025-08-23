@@ -6,6 +6,7 @@ from textual.widgets import Static, Button, Footer, DataTable
 from textual.app import ComposeResult
 from datetime import datetime
 from demo_creator.screens.demo_creator import DemoCreatorScreen
+from demo_creator.screens.upload_form import UploadScreen
 from demo_creator.screens.deploy_dpg import DeployDPGScreen
 
 class MainMenuScreen(Screen):
@@ -130,8 +131,7 @@ class MainMenuScreen(Screen):
         if btn_id == "create_demo_btn":
             self.app.push_screen(DemoCreatorScreen())
         elif btn_id == "upload_demo_btn":
-            self.app.pop_screen()
-            self.app.show_upload_screen()
+            self.app.push_screen(UploadScreen())
         elif btn_id == "deploy_dpg_btn":
             self.app.push_screen(DeployDPGScreen())
 

@@ -9,10 +9,14 @@ from textual.app import ComposeResult, App
 from jsonschema import validate
 from demo_creator.schema import schema
 from demo_creator.utils import get_demo_file_name, update_metadata, snapshot_latest_to_dated
+from textual.binding import Binding
 
 class DemoCreatorScreen(Screen):
     CSS_PATH = "../assets/demo_detail.tcss"
-
+    BINDINGS = [
+        Binding("escape", "go_back", "Back", show=True),
+    ]
+    
     def compose(self) -> ComposeResult:
         with Vertical(id="demo_detail_container"):
             yield Static("Create Demo", id="screen_title")
@@ -193,3 +197,9 @@ class DemoCreatorScreen(Screen):
                 main_menu_screen.reload()
         except Exception as ve:
             self.status_label.update(f"[red]❌ Validation Error: {ve}")
+
+    def action_go_back(self) -> None:
+        self.app.pop_screen()
+        # Optionally refresh main menu:
+        if hasattr(self.app.screen_stack[-1], "reload"):
+            self.app.screen_stack[-1].reload()
