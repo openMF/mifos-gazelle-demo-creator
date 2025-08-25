@@ -12,6 +12,7 @@ install:
 
 # Run the TUI app
 create-demo:
+    sudo -v
     @{{python}} demo_creator.py
 
 # # Run tests
