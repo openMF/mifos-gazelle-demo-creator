@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from demo_creator.schema import metadata_schema
 from jsonschema import validate, ValidationError
 
+
 def threaded_delete_from_jfrog(
     username, password, repo_url, deleted_files, ui_callback=None, cancel_flag=None
 ):
@@ -25,9 +26,7 @@ def threaded_delete_from_jfrog(
             try:
                 # HEAD request to check if file exists before DELETE
                 head_resp = requests.head(
-                    delete_url,
-                    auth=HTTPBasicAuth(username, password),
-                    timeout=10
+                    delete_url, auth=HTTPBasicAuth(username, password), timeout=10
                 )
 
                 if head_resp.status_code == 404:
@@ -36,9 +35,7 @@ def threaded_delete_from_jfrog(
 
                 # File exists, proceed with DELETE
                 response = requests.delete(
-                    delete_url,
-                    auth=HTTPBasicAuth(username, password),
-                    timeout=10
+                    delete_url, auth=HTTPBasicAuth(username, password), timeout=10
                 )
                 print(f"DELETE {delete_url} -> {response.status_code}")  # DEBUG PRINT
 
@@ -56,8 +53,10 @@ def threaded_delete_from_jfrog(
         status = "\n".join(report)
         if ui_callback:
             ui_callback(overall_success, status)
+
     t = threading.Thread(target=_run, daemon=True)
     t.start()
+
 
 def upload_to_jfrog(
     username: str,
@@ -65,7 +64,7 @@ def upload_to_jfrog(
     repo_url: str,
     folder: str = "demos/",
     progress_callback=None,
-    cancel_flag=None
+    cancel_flag=None,
 ) -> tuple[bool, str]:
     report = []
     overall_success = True
@@ -87,7 +86,11 @@ def upload_to_jfrog(
             overall_success = False
 
     # Find all files in 'demos/' tree (subfolders included)
-    files = [f for f in glob.glob(os.path.join(folder, "**"), recursive=True) if os.path.isfile(f)]
+    files = [
+        f
+        for f in glob.glob(os.path.join(folder, "**"), recursive=True)
+        if os.path.isfile(f)
+    ]
     if not files:
         return False, f"❌ No files found in {folder}"
 
@@ -101,7 +104,10 @@ def upload_to_jfrog(
         rel_path = os.path.relpath(file_path, folder)
 
         # If it's in latest/ and is marked deleted, skip
-        if rel_path.startswith("latest/") and os.path.basename(rel_path) in deleted_files:
+        if (
+            rel_path.startswith("latest/")
+            and os.path.basename(rel_path) in deleted_files
+        ):
             continue
 
         # Build remote URL: repo_url + "/" + rel_path (preserves timestamped folder structure)
@@ -112,7 +118,7 @@ def upload_to_jfrog(
                     upload_url,
                     data=f,
                     auth=HTTPBasicAuth(username, password),
-                    timeout=30
+                    timeout=30,
                 )
             if response.status_code in (200, 201):
                 msg = f"✅ {rel_path}: OK"
@@ -132,25 +138,32 @@ def upload_to_jfrog(
     status = "\n".join(report)
     return overall_success, status
 
+
 def threaded_upload_to_jfrog(
-    username: str, password: str, repo_url: str, folder: str = "demos/",
-    ui_callback=None, cancel_flag=None
+    username: str,
+    password: str,
+    repo_url: str,
+    folder: str = "demos/",
+    ui_callback=None,
+    cancel_flag=None,
 ):
     def _run():
         success, status = upload_to_jfrog(
-            username, password, repo_url, folder,
-            cancel_flag=cancel_flag
+            username, password, repo_url, folder, cancel_flag=cancel_flag
         )
         if ui_callback:
             ui_callback(success, status)
+
     t = threading.Thread(target=_run, daemon=True)
     t.start()
-    
+
+
 def get_demo_file_name(demo_name: str) -> str:
     safe_name = demo_name.strip().lower()
     safe_name = re.sub(r"\s+", "_", safe_name)
     safe_name = re.sub(r"[^a-z0-9_]", "", safe_name)
     return safe_name + ".json"
+
 
 def snapshot_latest_to_dated(date_str, time_str, latest_dir="demos/latest"):
     dated_dir = os.path.join("demos", date_str, time_str)
@@ -159,7 +172,9 @@ def snapshot_latest_to_dated(date_str, time_str, latest_dir="demos/latest"):
         dest_path = os.path.join(dated_dir, os.path.basename(src_path))
         shutil.copy(src_path, dest_path)
 
+
 METADATA_FILE = "demos/latest/metadata.json"
+
 
 def load_metadata():
     if os.path.exists(METADATA_FILE):
@@ -168,10 +183,12 @@ def load_metadata():
     else:
         return {"demos": []}
 
+
 def save_metadata(metadata):
     os.makedirs(os.path.dirname(METADATA_FILE), exist_ok=True)
     with open(METADATA_FILE, "w") as f:
         json.dump(metadata, f, indent=2)
+
 
 def update_metadata(demo_data, file_name, username):
     metadata = load_metadata()
@@ -211,7 +228,7 @@ def update_metadata(demo_data, file_name, username):
             "created_by": username,
             "last_modified_by": username,
             "deleted": False,
-            "tags": demo_data.get("tags", [])
+            "tags": demo_data.get("tags", []),
         }
         metadata["demos"].append(entry)
 

@@ -1,13 +1,16 @@
-import os
-import json
 from textual.screen import Screen
 from textual.containers import Vertical, Horizontal
 from textual.widgets import Static, Button, Footer, DataTable
 from textual.app import ComposeResult
 from datetime import datetime
-from demo_creator.screens.demo_creator import DemoCreatorScreen
-from demo_creator.screens.upload_form import UploadScreen
-from demo_creator.screens.deploy_dpg import DeployDPGScreen
+import os
+import json
+
+from demo_creator.screens.demo_creator_screen import DemoCreatorScreen
+from demo_creator.screens.upload_form_screen import UploadScreen
+from demo_creator.screens.deploy_dpg_screen import DeployDPGScreen
+from demo_creator.screens.demo_detail_screen import DemoDetailScreen
+
 
 class MainMenuScreen(Screen):
     CSS_PATH = "../assets/main_menu.tcss"
@@ -17,8 +20,12 @@ class MainMenuScreen(Screen):
         with Vertical(id="main_menu_container"):
             # Title and user info
             yield Static("Main Menu", id="main_menu_title")
-            yield Static(f"User: {getattr(self.app, 'current_user', '')}", id="user_info")
-            yield Static(f"Email: {getattr(self.app, 'current_email', '')}", id="email_info")
+            yield Static(
+                f"User: {getattr(self.app, 'current_user', '')}", id="user_info"
+            )
+            yield Static(
+                f"Email: {getattr(self.app, 'current_email', '')}", id="email_info"
+            )
 
             # Buttons row
             with Horizontal(id="action_buttons"):
@@ -31,7 +38,9 @@ class MainMenuScreen(Screen):
 
             # DataTable widget for demos
             self.data_table = DataTable(id="demo_data_table")
-            self.data_table.cursor_type = "row"  # Crucial change: enable full row selection
+            self.data_table.cursor_type = (
+                "row"  # Crucial change: enable full row selection
+            )
             yield self.data_table
 
             # Footer
@@ -67,8 +76,8 @@ class MainMenuScreen(Screen):
             updated = demo.get("updated_at", "")
             if updated:
                 try:
-                    dt = datetime.fromisoformat(updated.replace('Z', '+00:00'))
-                    updated_str = dt.strftime('%Y-%m-%d %H:%M')
+                    dt = datetime.fromisoformat(updated.replace("Z", "+00:00"))
+                    updated_str = dt.strftime("%Y-%m-%d %H:%M")
                 except Exception:
                     updated_str = updated
             else:
@@ -82,7 +91,9 @@ class MainMenuScreen(Screen):
             else:
                 tag_chips = ""
 
-            self.data_table.add_row(name, desc, updated_str, tag_chips, key=demo["demoId"])
+            self.data_table.add_row(
+                name, desc, updated_str, tag_chips, key=demo["demoId"]
+            )
 
     def get_demo_list(self) -> list:
         """Fetches the list of demos from the metadata file, sorted by latest updated first."""
@@ -120,9 +131,7 @@ class MainMenuScreen(Screen):
         # Check for the placeholder row's key, which would be 'None'
         if not demo_id or demo_id == "None":
             return
-            
-        # Push the next screen with the selected demo's ID
-        from demo_creator.screens.DemoDetailScreen import DemoDetailScreen
+
         self.app.push_screen(DemoDetailScreen(demo_id))
 
     def on_button_pressed(self, event: Button.Pressed) -> None:

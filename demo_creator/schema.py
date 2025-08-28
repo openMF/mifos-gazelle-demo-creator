@@ -18,18 +18,18 @@ schema = {
                     "properties": {
                         "title": {"type": "string"},
                         "url": {"type": "string", "format": "uri"},
-                        "details": {"type": "string"}
-                    }
+                        "details": {"type": "string"},
+                    },
                 }
             },
-            "minProperties": 1
+            "minProperties": 1,
         },
         "tags": {
             "type": "array",
             "items": {"type": "string"},
-            "description": "List of required DPG names for this demo"
-        }
-    }
+            "description": "List of required DPG names for this demo",
+        },
+    },
 }
 
 metadata_schema = {
@@ -43,10 +43,18 @@ metadata_schema = {
             "items": {
                 "type": "object",
                 "required": [
-                    "demoId", "name", "file_name",
-                    "description", "version", "steps_count",
-                    "created_at", "updated_at",
-                    "created_by", "last_modified_by", "deleted", "tags"
+                    "demoId",
+                    "name",
+                    "file_name",
+                    "description",
+                    "version",
+                    "steps_count",
+                    "created_at",
+                    "updated_at",
+                    "created_by",
+                    "last_modified_by",
+                    "deleted",
+                    "tags",
                 ],
                 "properties": {
                     "demoId": {"type": "string", "format": "uuid"},
@@ -60,47 +68,45 @@ metadata_schema = {
                     "created_by": {"type": "string"},
                     "last_modified_by": {"type": "string"},
                     "deleted": {"type": "boolean"},
-                    "tags": {"type": "array", "items": {"type": "string"}}
-                }
-            }
+                    "tags": {"type": "array", "items": {"type": "string"}},
+                },
+            },
         }
-    }
+    },
 }
 
 DPG_DEFAULT_CONFIG = {
     "general": {
         "mode": "deploy",
         "GAZELLE_DOMAIN": "mifos.gazelle.test",
-        "GAZELLE_VERSION": "1.1.0"
+        "GAZELLE_VERSION": "1.1.0",
     },
-    "environment": {
-        "user": "yash-sharma"
-    },
+    "environment": {"user": "yash-sharma"},
     "mysql": {
         "MYSQL_SERVICE_NAME": "mysql",
         "MYSQL_SERVICE_PORT": "3306",
         "LOCAL_PORT": "3307",
         "MAX_WAIT_SECONDS": "60",
-        "MYSQL_HOST": "127.0.0.1"
+        "MYSQL_HOST": "127.0.0.1",
     },
     "infra": {
         "enabled": "false",
         "INFRA_NAMESPACE": "infra",
-        "INFRA_RELEASE_NAME": "infra"
+        "INFRA_RELEASE_NAME": "infra",
     },
     "mifosx": {
         "enabled": "true",
         "MIFOSX_NAMESPACE": "mifosx",
         "MIFOSX_REPO_DIR": "mifosx",
         "MIFOSX_BRANCH": "gazelle-1.1.0",
-        "MIFOSX_REPO_LINK": "https://github.com/openMF/mifosx-docker.git"
+        "MIFOSX_REPO_LINK": "https://github.com/openMF/mifosx-docker.git",
     },
     "vnext": {
         "enabled": "true",
         "VNEXTBRANCH": "beta1",
         "VNEXTREPO_DIR": "vnext",
         "VNEXT_NAMESPACE": "vnext",
-        "VNEXT_REPO_LINK": "https://github.com/mojaloop/platform-shared-tools.git"
+        "VNEXT_REPO_LINK": "https://github.com/mojaloop/platform-shared-tools.git",
     },
     "phee": {
         "enabled": "true",
@@ -111,6 +117,6 @@ DPG_DEFAULT_CONFIG = {
         "PH_REPO_LINK": "https://github.com/openMF/ph-ee-env-labs.git",
         "PH_EE_ENV_TEMPLATE_REPO_LINK": "https://github.com/openMF/ph-ee-env-template.git",
         "PH_EE_ENV_TEMPLATE_REPO_BRANCH": "v1.13.0-gazelle-1.1.0",
-        "PH_EE_ENV_TEMPLATE_REPO_DIR": "ph_template"
-    }
+        "PH_EE_ENV_TEMPLATE_REPO_DIR": "ph_template",
+    },
 }

@@ -11,7 +11,7 @@ from textual.binding import Binding
 from jsonschema import validate, ValidationError
 
 from demo_creator.schema import schema
-from demo_creator.screens.ConfirmDialogScreen import ConfirmDialogScreen
+from demo_creator.screens.confirm_dialog_screen import ConfirmDialogScreen
 
 
 def get_demo_file_path(demo_id: str) -> Optional[str]:
@@ -29,7 +29,10 @@ def get_demo_file_path(demo_id: str) -> Optional[str]:
     demos = metadata.get("demos", [])
     for demo in demos:
         if demo.get("demoId") == demo_id and not demo.get("deleted", False):
-            fname = demo.get("file_name") or f'{demo.get("demoName", "").replace(" ", "_")}.json'
+            fname = (
+                demo.get("file_name")
+                or f'{demo.get("demoName", "").replace(" ", "_")}.json'
+            )
             return os.path.join("demos", "latest", fname)
     return None
 
@@ -127,10 +130,22 @@ class DemoDetailScreen(Screen):
 
         # Add static metadata fields directly to the scroll container
         self.scroll_container.mount(Static("Demo Name:", classes="label"))
-        self.scroll_container.mount(Static(self.demo_data.get("demoName", ""), id="demo_name_static", classes="meta_data"))
+        self.scroll_container.mount(
+            Static(
+                self.demo_data.get("demoName", ""),
+                id="demo_name_static",
+                classes="meta_data",
+            )
+        )
 
         self.scroll_container.mount(Static("Demo Description:", classes="label"))
-        self.scroll_container.mount(Static(self.demo_data.get("demoDescription", "(No description)"), id="demo_desc_static", classes="meta_data"))
+        self.scroll_container.mount(
+            Static(
+                self.demo_data.get("demoDescription", "(No description)"),
+                id="demo_desc_static",
+                classes="meta_data",
+            )
+        )
 
         # DPGs/tags display
         self.scroll_container.mount(Static("Required DPGs:", classes="label"))
@@ -141,14 +156,18 @@ class DemoDetailScreen(Screen):
             )
         else:
             tags_display = "(None)"
-        self.scroll_container.mount(Static(tags_display, id="dpg_tags_static", classes="meta_data"))
+        self.scroll_container.mount(
+            Static(tags_display, id="dpg_tags_static", classes="meta_data")
+        )
 
         # Populate steps as static labels
         steps = self.demo_data.get("steps", {})
         self.log(f"Found {len(steps)} steps for demo '{self.demo_id}'")
-        
+
         if not steps:
-            self.scroll_container.mount(Static("No steps found.", classes="empty_steps"))
+            self.scroll_container.mount(
+                Static("No steps found.", classes="empty_steps")
+            )
             return
 
         sorted_step_keys = sorted(steps.keys(), key=lambda x: int(x))
@@ -178,14 +197,20 @@ class DemoDetailScreen(Screen):
 
         # Add inputs for metadata
         self.scroll_container.mount(Static("Demo Name:", classes="label"))
-        self.input_demo_name = Input(value=self.demo_data.get("demoName", ""), id="input_demo_name")
+        self.input_demo_name = Input(
+            value=self.demo_data.get("demoName", ""), id="input_demo_name"
+        )
         self.scroll_container.mount(self.input_demo_name)
 
         self.scroll_container.mount(Static("Demo Description:", classes="label"))
-        self.input_demo_desc = Input(value=self.demo_data.get("demoDescription", ""), id="input_demo_desc")
+        self.input_demo_desc = Input(
+            value=self.demo_data.get("demoDescription", ""), id="input_demo_desc"
+        )
         self.scroll_container.mount(self.input_demo_desc)
 
-        self.scroll_container.mount(Static("Required DPGs (comma separated):", classes="label"))
+        self.scroll_container.mount(
+            Static("Required DPGs (comma separated):", classes="label")
+        )
         tags_array = self.demo_data.get("tags", [])
         tags_str = ", ".join(tags_array) if tags_array else ""
         self.input_demo_tags = Input(value=tags_str, id="input_demo_tags")
@@ -199,9 +224,19 @@ class DemoDetailScreen(Screen):
             step = steps[step_idx]
 
             # Inputs for this step
-            title_input = Input(value=step.get("title", ""), placeholder="Step Title", classes="step_input")
-            url_input = Input(value=step.get("url", ""), placeholder="Step URL", classes="step_input")
-            details_input = Input(value=step.get("details", ""), placeholder="Step Details", classes="step_input")
+            title_input = Input(
+                value=step.get("title", ""),
+                placeholder="Step Title",
+                classes="step_input",
+            )
+            url_input = Input(
+                value=step.get("url", ""), placeholder="Step URL", classes="step_input"
+            )
+            details_input = Input(
+                value=step.get("details", ""),
+                placeholder="Step Details",
+                classes="step_input",
+            )
 
             self.inputs[step_idx] = {
                 "title": title_input,
@@ -218,7 +253,7 @@ class DemoDetailScreen(Screen):
                 url_input,
                 Static("Details:", classes="label"),
                 details_input,
-                classes="step_container"
+                classes="step_container",
             )
             self.scroll_container.mount(step_container)
 
@@ -248,11 +283,9 @@ class DemoDetailScreen(Screen):
         dialog = ConfirmDialogScreen(
             "Are you sure you want to delete this demo?",
             on_confirm=on_confirm,
-            on_cancel=on_cancel
+            on_cancel=on_cancel,
         )
         self.app.push_screen(dialog)
-
-
 
     def delete_demo(self) -> None:
         try:
@@ -283,7 +316,11 @@ class DemoDetailScreen(Screen):
             if demo_desc:
                 updated_data["demoDescription"] = demo_desc
 
-            tags_raw = self.input_demo_tags.value.strip() if hasattr(self, "input_demo_tags") else ""
+            tags_raw = (
+                self.input_demo_tags.value.strip()
+                if hasattr(self, "input_demo_tags")
+                else ""
+            )
             tags_list = [t.strip() for t in tags_raw.split(",") if t.strip()]
             updated_data["tags"] = tags_list
 
@@ -310,7 +347,13 @@ class DemoDetailScreen(Screen):
             validate(instance=updated_data, schema=schema)
 
             # Handle file name change if demo name changed
-            from demo_creator.utils import get_demo_file_name, load_metadata, save_metadata, snapshot_latest_to_dated
+            from demo_creator.utils import (
+                get_demo_file_name,
+                load_metadata,
+                save_metadata,
+                snapshot_latest_to_dated,
+            )
+
             old_file_name = os.path.basename(self.file_path)
             new_file_name = get_demo_file_name(demo_name)
             latest_dir = os.path.dirname(self.file_path)
@@ -318,7 +361,9 @@ class DemoDetailScreen(Screen):
 
             if new_file_name != old_file_name:
                 if os.path.exists(new_file_path):
-                    self.status_label.update(f"[red]A demo with that name already exists. Choose a different name.")
+                    self.status_label.update(
+                        f"[red]A demo with that name already exists. Choose a different name."
+                    )
                     return
                 os.rename(self.file_path, new_file_path)
                 self.file_path = new_file_path
@@ -331,6 +376,7 @@ class DemoDetailScreen(Screen):
             metadata = load_metadata()
             username = getattr(self.app, "current_user", "system")
             import datetime
+
             now = datetime.datetime.now(datetime.timezone.utc)
             now_str = now.strftime("%Y-%m-%dT%H:%M:%SZ")
 

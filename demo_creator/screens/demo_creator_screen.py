@@ -8,15 +8,20 @@ from textual.widgets import Static, Input, Button, Footer, Label
 from textual.app import ComposeResult, App
 from jsonschema import validate
 from demo_creator.schema import schema
-from demo_creator.utils import get_demo_file_name, update_metadata, snapshot_latest_to_dated
+from demo_creator.utils import (
+    get_demo_file_name,
+    update_metadata,
+    snapshot_latest_to_dated,
+)
 from textual.binding import Binding
 
+
 class DemoCreatorScreen(Screen):
-    CSS_PATH = "../assets/demo_detail.tcss"
+    CSS_PATH = "../assets/demo_creator.tcss"
     BINDINGS = [
         Binding("escape", "go_back", "Back", show=True),
     ]
-    
+
     def compose(self) -> ComposeResult:
         with Vertical(id="demo_detail_container"):
             yield Static("Create Demo", id="screen_title")
@@ -42,7 +47,7 @@ class DemoCreatorScreen(Screen):
             "tags": [],
             "steps": [
                 {"title": "", "url": "", "details": ""},
-            ]
+            ],
         }
         self.inputs = {}
         self.render_form()
@@ -53,20 +58,34 @@ class DemoCreatorScreen(Screen):
 
         # Demo Name
         self.scroll_container.mount(Static("Demo Name:", classes="label"))
-        name_input = Input(value=self.demo_data.get("demoName", ""), placeholder="e.g., Onboarding Walkthrough")
+        name_input = Input(
+            value=self.demo_data.get("demoName", ""),
+            placeholder="e.g., Onboarding Walkthrough",
+        )
         self.inputs["demoName"] = name_input
         self.scroll_container.mount(name_input)
 
         # Demo Description
         self.scroll_container.mount(Static("Demo Description:", classes="label"))
-        desc_input = Input(value=self.demo_data.get("demoDescription", ""), placeholder="Short description...")
+        desc_input = Input(
+            value=self.demo_data.get("demoDescription", ""),
+            placeholder="Short description...",
+        )
         self.inputs["demoDescription"] = desc_input
         self.scroll_container.mount(desc_input)
 
         # DPGs (tags)
-        self.scroll_container.mount(Static("Required DPGs (comma separated):", classes="label"))
-        dpgs_str = ", ".join(self.demo_data.get("tags", [])) if self.demo_data.get("tags") else ""
-        dpgs_input = Input(value=dpgs_str, placeholder="e.g., MifosX, Payments, Reports")
+        self.scroll_container.mount(
+            Static("Required DPGs (comma separated):", classes="label")
+        )
+        dpgs_str = (
+            ", ".join(self.demo_data.get("tags", []))
+            if self.demo_data.get("tags")
+            else ""
+        )
+        dpgs_input = Input(
+            value=dpgs_str, placeholder="e.g., MifosX, Payments, Reports"
+        )
         self.inputs["tags"] = dpgs_input
         self.scroll_container.mount(dpgs_input)
 
@@ -76,9 +95,19 @@ class DemoCreatorScreen(Screen):
         # Steps
         for idx, step in enumerate(self.demo_data["steps"]):
             step_inputs = {}
-            title_input = Input(value=step.get("title", ""), placeholder="Step Title", classes="step_input")
-            url_input = Input(value=step.get("url", ""), placeholder="Step URL", classes="step_input")
-            details_input = Input(value=step.get("details", ""), placeholder="Step Details", classes="step_input")
+            title_input = Input(
+                value=step.get("title", ""),
+                placeholder="Step Title",
+                classes="step_input",
+            )
+            url_input = Input(
+                value=step.get("url", ""), placeholder="Step URL", classes="step_input"
+            )
+            details_input = Input(
+                value=step.get("details", ""),
+                placeholder="Step Details",
+                classes="step_input",
+            )
             step_inputs["title"] = title_input
             step_inputs["url"] = url_input
             step_inputs["details"] = details_input
@@ -97,11 +126,11 @@ class DemoCreatorScreen(Screen):
                         "Remove Step",
                         id=f"remove_step_{idx}",
                         classes="remove_step_btn",
-                        disabled=(len(self.demo_data["steps"]) == 1)
+                        disabled=(len(self.demo_data["steps"]) == 1),
                     ),
-                    classes="step_btn_row"
+                    classes="step_btn_row",
                 ),
-                classes="step_container"
+                classes="step_container",
             )
             self.scroll_container.mount(step_container)
 
