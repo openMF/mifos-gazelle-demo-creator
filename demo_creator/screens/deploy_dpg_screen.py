@@ -31,15 +31,16 @@ def ini_text(config: dict) -> str:
 
 def parse_ini_to_dict(ini_path):
     config = configparser.ConfigParser()
+    config.optionxform = str  # preserve case
     config.read(ini_path)
     out = {}
     for section in config.sections():
         out[section] = dict(config.items(section))
     return out
 
-
 def save_dict_to_ini(config_dict, ini_path):
     config = configparser.ConfigParser()
+    config.optionxform = str  # preserve case
     for section, params in config_dict.items():
         config[section] = {str(k): str(v) for k, v in params.items()}
     os.makedirs(os.path.dirname(ini_path), exist_ok=True)
@@ -156,7 +157,9 @@ class DeployDPGScreen(Screen):
 
     def ask_deploy_confirmation(self):
         def on_confirm():
-            ini_path = INI_OUTPUT_FILENAME  # Always use the latest, saved file
+            ini_path = INI_OUTPUT_FILENAME
+            if not os.path.exists(ini_path):
+                save_dict_to_ini(self.config, ini_path)
             self.app.push_screen(
                 DeployLogsScreen(
                     ini_path=ini_path,

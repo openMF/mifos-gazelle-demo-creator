@@ -12,7 +12,8 @@ setup:
 
 # Run the TUI app
 run:
-    sudo {{python}} main.py
+    sudo -v
+    @{{python}} main.py
 
 # Clean virtualenv and cache
 clean:
