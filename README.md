@@ -2,8 +2,9 @@
 
 > A terminal user interface (TUI) to author, manage, sync, and deploy demos for the Mifos Gazelle ecosystem.
 
-- **Setup:** see [SETUP.md](./SETUP.md)
-- **Architecture & repo layout:** see [ARCHITECTURE.md](./ARCHITECTURE.md)
+- **Setup:** see [SETUP.md](./docs/SETUP.md)
+- **User Guide:** see [USER_GUIDE.md](./docs/USER_GUIDE.md)
+- **Architecture & repo layout:** see [ARCHITECTURE.md](./docs/ARCHITECTURE.md)
 
 ## Features
 
