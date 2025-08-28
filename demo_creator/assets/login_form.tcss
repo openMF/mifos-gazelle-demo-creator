@@ -1,0 +1,95 @@
+$accent: rgb(6, 100, 160);
+$accent-dark: rgb(2, 50, 80);
+$text: rgb(220, 220, 220);
+$text-muted: rgb(150, 150, 150);
+$background: rgb(15, 15, 20);
+$button-bg: rgb(45, 55, 80);
+$button-text: rgb(230, 230, 230);
+$button-text-focus: rgb(255, 255, 255);
+$button-disabled-bg: rgb(40, 40, 50);
+$button-disabled-text: rgb(90, 90, 120);
+
+Screen {
+  background: $background;
+  color: $text;
+}
+
+#login_form {
+  width: 60%;
+  max-width: 80;
+  min-width: 35;
+  height: auto;
+  align: center middle;
+  background: $background;
+  border: round $accent-dark;
+  padding: 2 4;
+  color: $text;
+}
+
+/* Inputs and Labels */
+#login_form Static {
+  padding-left: 1;
+  color: $text-muted;
+}
+
+#login_title, #login_form #login_title {
+  color: $accent !important;
+  text-style: bold;
+  content-align: center middle;
+  margin-bottom: 2;
+  background: transparent;
+  border: none;
+  height: 2;
+}
+
+/* Input fields */
+#login_form Input {
+  border: round $accent-dark;
+  background: $button-bg;
+  color: $button-text;
+  margin-bottom: 1;
+  padding-left: 1;
+  padding-right: 1;
+  transition: border 50ms;
+}
+
+/* Input focus highlight */
+#login_form Input:focus {
+  border: round $accent;
+  background: $accent-dark;
+  color: $button-text-focus;
+  text-style: bold;
+}
+
+/* Button styles */
+#login_form Button {
+  border: round $accent;
+  padding-left: 2;
+  padding-right: 2;
+  background: $button-bg;
+  color: $button-text;
+  margin-top: 2;
+}
+
+#login_form Button:focus {
+  background: $accent;
+  color: $button-text-focus;
+  text-style: bold;
+}
+#login_form Button:disabled {
+  background: $button-disabled-bg;
+  color: $button-disabled-text;
+}
+
+/* Status message */
+#login_status {
+  text-align: center;
+  margin-top: 1;
+  margin-bottom: 1;
+  color: $accent;
+}
+
+/* Footer */
+Footer {
+  height: 1;
+}

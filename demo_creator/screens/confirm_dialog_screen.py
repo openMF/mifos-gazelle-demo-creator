@@ -2,9 +2,10 @@ from textual.screen import Screen
 from textual.containers import Vertical, Horizontal
 from textual.widgets import Static, Button, Label
 
+
 class ConfirmDialogScreen(Screen):
     CSS_PATH = "../assets/confirm_dialog.tcss"
-    BINDINGS = []  # prevent escape by default; add if you want
+    BINDINGS = []
 
     def __init__(self, message, on_confirm, on_cancel):
         super().__init__()
@@ -18,9 +19,9 @@ class ConfirmDialogScreen(Screen):
             Horizontal(
                 Button("Yes", id="confirm_yes"),
                 Button("No", id="confirm_no"),
-                id="dialog_buttons"
+                id="dialog_buttons",
             ),
-            id="confirm_overlay"
+            id="confirm_overlay",
         )
 
     def on_button_pressed(self, event):

@@ -7,16 +7,28 @@ from textual.screen import Screen
 from textual.containers import Vertical, ScrollableContainer, Horizontal
 from textual.widgets import Static, Button, Footer
 from textual.app import ComposeResult
+from demo_creator.config import LOG_DISPLAY_LIMIT, LOG_STORE_LIMIT
+
 
 def strip_ansi(s):
-    ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-\~]')
-    return ansi_escape.sub('', s)
+    ansi_escape = re.compile(r"\x1B\[[0-?]*[ -/]*[@-\~]")
+    return ansi_escape.sub("", s)
+
 
 class DeployLogsScreen(Screen):
     CSS_PATH = "../assets/deploy_logs.tcss"
     BINDINGS = [("ctrl+c", "cancel_deploy", "Cancel Deployment")]
 
-    def __init__(self, ini_path, repo_dir, git_url, branch_name, deploy_cmd_template, artifact_dir, prev_screen=None):
+    def __init__(
+        self,
+        ini_path,
+        repo_dir,
+        git_url,
+        branch_name,
+        deploy_cmd_template,
+        artifact_dir,
+        prev_screen=None,
+    ):
         super().__init__()
         self.ini_path = ini_path
         self.repo_dir = repo_dir
@@ -52,12 +64,23 @@ class DeployLogsScreen(Screen):
     def run_deploy_job(self):
         os.makedirs(self.artifact_dir, exist_ok=True)
         try:
-            clone_msg = f"[dim]Cloning repo: {self.git_url} (branch: {self.branch_name})"
+            clone_msg = (
+                f"[dim]Cloning repo: {self.git_url} (branch: {self.branch_name})"
+            )
             if not os.path.exists(self.repo_dir):
                 self._thread_safe_log(clone_msg)
                 proc = subprocess.Popen(
-                    ["git", "clone", "--branch", self.branch_name, self.git_url, self.repo_dir],
-                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+                    [
+                        "git",
+                        "clone",
+                        "--branch",
+                        self.branch_name,
+                        self.git_url,
+                        self.repo_dir,
+                    ],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
                 )
                 self._deploy_proc = proc
                 self._thread_safe_stream_subprocess(proc)
@@ -69,11 +92,15 @@ class DeployLogsScreen(Screen):
                     return
                 self._thread_safe_log("[green]Repo cloned successfully!")
             else:
-                self._thread_safe_log("[dim]Repo already exists, pulling latest changes...")
+                self._thread_safe_log(
+                    "[dim]Repo already exists, pulling latest changes..."
+                )
                 proc = subprocess.Popen(
                     ["git", "pull"],
                     cwd=self.repo_dir,
-                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
                 )
                 self._thread_safe_stream_subprocess(proc)
                 if proc.returncode is not None and proc.returncode != 0:
@@ -85,11 +112,16 @@ class DeployLogsScreen(Screen):
                 self._thread_safe_log("[green]Repo updated with latest changes!")
             # ---- DEPLOY STEP ----
             self._thread_safe_log("[dim]Starting deployment process...")
-            cmd = [a if a != "{ini_path}" else self.ini_path for a in self.deploy_cmd_template]
+            cmd = [
+                a if a != "{ini_path}" else self.ini_path
+                for a in self.deploy_cmd_template
+            ]
             proc = subprocess.Popen(
                 cmd,
                 cwd=self.repo_dir,
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
             )
             self._deploy_proc = proc
             self._thread_safe_stream_subprocess(proc)
@@ -130,8 +162,8 @@ class DeployLogsScreen(Screen):
 
     def _log_live(self, line: str):
         # In-place progress updates (\r): overwrite previous line
-        if '\r' in line:
-            for part in line.split('\r'):
+        if "\r" in line:
+            for part in line.split("\r"):
                 if part:
                     if self.log_lines:
                         self.log_lines[-1] = part
@@ -139,13 +171,11 @@ class DeployLogsScreen(Screen):
                         self.log_lines.append(part)
         else:
             self.log_lines.append(line)
-        # Performance: only keep last 200 lines
-        if len(self.log_lines) > 200:
-            self.log_lines = self.log_lines[-200:]
+        if len(self.log_lines) > LOG_STORE_LIMIT:
+            self.log_lines = self.log_lines[-LOG_STORE_LIMIT:]
 
     def _update_logs_ui(self):
-        # Only show last 100 lines for best speed
-        content = "\n".join(self.log_lines[-100:])
+        content = "\n".join(self.log_lines[-LOG_DISPLAY_LIMIT:])
         self.log_widget.update(content)
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -168,9 +198,17 @@ class DeployLogsScreen(Screen):
                     self._deploy_proc.send_signal(signal.SIGINT)
                 else:
                     self._deploy_proc.terminate()
-                self.status_widget.update("[red]Deployment cancelled by user.[yellow] Cleanup in progress...")
-                self._log_live("[red]Deployment cancelled by user.[yellow] Cleanup in progress...")
-                threading.Thread(target=self._wait_for_cleanup, args=(self._deploy_proc,), daemon=True).start()
+                self.status_widget.update(
+                    "[red]Deployment cancelled by user.[yellow] Cleanup in progress..."
+                )
+                self._log_live(
+                    "[red]Deployment cancelled by user.[yellow] Cleanup in progress..."
+                )
+                threading.Thread(
+                    target=self._wait_for_cleanup,
+                    args=(self._deploy_proc,),
+                    daemon=True,
+                ).start()
                 self.process_finished = True
             except Exception as e:
                 self.status_widget.update(f"[red]Could not stop process: {e}")
@@ -178,5 +216,9 @@ class DeployLogsScreen(Screen):
 
     def _wait_for_cleanup(self, proc):
         proc.wait()
-        self.app.call_from_thread(self.status_widget.update, "[green]Cleanup done. Deployment stopped.")
-        self.app.call_from_thread(self._log_live, "[green]Cleanup done. Deployment stopped.")
+        self.app.call_from_thread(
+            self.status_widget.update, "[green]Cleanup done. Deployment stopped."
+        )
+        self.app.call_from_thread(
+            self._log_live, "[green]Cleanup done. Deployment stopped."
+        )

@@ -1,34 +1,54 @@
-# Mifos Gazelle Demo Creator
-This repo contains the code for the demo creator for Mifos Gazelle. Note this is currently WIP. 
+# Mifos Gazelle Demo Creator (TUI)
 
-branch main - is release/stable code
+> A terminal user interface (TUI) to author, manage, sync, and deploy demos for the Mifos Gazelle ecosystem.
 
-branch dev - is current development branch
+- **Setup:** see [SETUP.md](./docs/SETUP.md)
+- **User Guide:** see [USER_GUIDE.md](./docs/USER_GUIDE.md)
+- **Architecture & repo layout:** see [ARCHITECTURE.md](./docs/ARCHITECTURE.md)
 
-All PR's must be to dev.  dev-->Main will be undertaken at release points
+## Features
 
-## Quick Setup
+- Create demo files with steps, descriptions, and tags
+- View, edit, and delete demos with versioned metadata
+- Sync deletions and upload demos to Artifactory
+- Configure and deploy DPG environments with live logs using mifos-gazelle
 
-1. Clone the repository:
+## Quick Start
 
-```bash
+```
 git clone https://github.com/openMF/mifos-gazelle-demo-creator.git
 cd mifos-gazelle-demo-creator
+
+# Install system tools (Python, uv, just) if missing
+bash ./scripts/install_dependencies.sh
+
+# Project setup
+just setup
+
+# Run the TUI app
+just run
+# or: .venv/bin/python main.py
 ```
-2. Run the setup script:
 
-```bash
-bash scripts/setup.sh
-```
-This script checks for and installs the tools.
+## Usage
 
-3. Install dependencies and run the application:
+- **Login:** enter username and email
+- **Main Menu:** Create Demo, Upload Demo, Deploy DPG
+- **Create Demo:** add steps (title, URL, details), tags, submit to save
+- **Demo Details:** inspect/edit/delete demos
+- **Upload:** sync deletions and upload to JFrog
+- **Deploy:** edit config, confirm, and watch logs
 
-```bash
-just install
-just create-demo
-```
-The TUI will start.
+## Configuration
 
-## NOTES
-This is currently Work in progress.
+Edit `demo_creator/config.py` for:
+- Gazelle repo settings and deploy command
+- Log display/store limits
+
+## Repository Structure
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for a detailed breakdown of modules, screens, and flows.
+
+## License
+
+Mozilla Public License 2.0 (MPL-2.0)

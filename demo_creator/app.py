@@ -6,6 +6,7 @@ from demo_creator.screens import (
     UploadScreen,
 )
 
+
 class DemoCreatorApp(App):
     CSS_PATH = "./assets/base.tcss"
 

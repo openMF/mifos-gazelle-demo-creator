@@ -1,5 +1,4 @@
-/* ------ demo_creator.tcss ------ */
-
+/* ===== Colors and Variables (identical to demo_detail.tcss) ===== */
 $accent: rgb(6, 100, 160);
 $accent-dark: rgb(2, 50, 80);
 $accent-light: rgb(220, 240, 255);
@@ -13,21 +12,17 @@ $button-text-focus: rgb(255, 255, 255);
 $button-disabled-bg: rgb(40, 40, 50);
 $button-disabled-text: rgb(90, 90, 120);
 
-/* Main container (matches DemoDetailScreen) */
-#demo_detail_container, #demo_creator_form {
-    width: 70%;
-    max-width: 90;
-    min-width: 40;
+/* ===== Main Form Container (matches DemoDetailScreen) ===== */
+#demo_detail_container {
     height: 100%;
-    align: center middle;
+    width: 100%;
+    layout: vertical;
     background: $background;
     color: $text;
-    border: round $accent-dark;
-    padding: 2 4;
-    layout: vertical;
+    padding: 1 2;
 }
 
-/* Screen title */
+/* Screen Title */
 #screen_title {
     height: 3;
     content-align: center middle;
@@ -38,30 +33,54 @@ $button-disabled-text: rgb(90, 90, 120);
     margin-bottom: 1;
 }
 
+/* Top buttons row */
+#top_buttons_row {
+    layout: horizontal;
+    height: 3;
+    margin-bottom: 1;
+}
+#top_buttons_row Button {
+    margin-right: 2;
+    border: round $accent;
+    padding-left: 2;
+    padding-right: 2;
+    background: $button-bg;
+    color: $button-text;
+}
+#top_buttons_row Button:focus {
+    background: $accent;
+    color: $button-text-focus;
+    text-style: bold;
+}
+#top_buttons_row Button:disabled {
+    background: $button-disabled-bg;
+    color: $button-disabled-text;
+}
+
 /* Status label */
-#status_label, #status {
+#status_label {
     height: 1;
     margin-bottom: 1;
     padding-left: 1;
-    text-align: center;
-    color: $error;
 }
 
-/* Scrollable scroll container for form */
-#demo_scroll_container, #steps_scroll_container {
+/* Scroll container */
+#demo_scroll_container {
     height: 1fr;
     layout: vertical;
     overflow-y: auto;
     padding: 1 2;
     border: solid $accent;
-    background: $background;
-    margin-bottom: 1;
 }
 
-/* Metadata/step headers and field labels */
-.section_header, .label {
+/* Labels and headers */
+.label {
     text-style: bold;
     padding-left: 0;
+    margin-top: 1;
+}
+.section_header {
+    text-style: bold underline;
     margin-top: 1;
     margin-bottom: 1;
 }
@@ -70,30 +89,25 @@ $button-disabled-text: rgb(90, 90, 120);
     margin-bottom: 1;
 }
 
-/* Each step container */
+/* Step Containers and Fields */
 .step_container {
     border: solid $accent-dark;
-    padding: 1 1 0 1;     /* No bottom padding */
+    padding: 1 1;
     margin-bottom: 1;
     background: $background;
     height: auto;
 }
 .step_container > * {
     min-height: 1;
-    margin-bottom: 0;
 }
-
-/* Step input fields */
-.step_input, .meta_data, .step_field {
+.step_field, .meta_data, .step_input {
     color: $text;
-    background: $background;
     padding-left: 2;
     margin-bottom: 1;
 }
 
-/* Remove Step (in-row) */
+/* Remove Step Button Row */
 .step_btn_row {
-    justify-content: flex-end;
     margin-top: 1;
     margin-bottom: 0;
 }
@@ -107,28 +121,7 @@ $button-disabled-text: rgb(90, 90, 120);
     border: none;
 }
 
-/* Bottom action buttons row */
-#bottom_buttons_row {
-    layout: horizontal;
-    height: 3;
-    margin-bottom: 1;
-    margin-top: 1;
-    content-align: center middle;
-}
-
-/* Action buttons styling */
-.submit_button, .add_step_btn, .cancel_button {
-    min-width: 12;
-    border: round $accent;
-    margin-right: 2;
-    text-style: bold;
-    padding-left: 3;
-    padding-right: 3;
-}
-.submit_button { background: $accent; color: $accent-light; }
-.add_step_btn  { background: $button-bg; color: $button-text; }
-.cancel_button { background: $button-disabled-bg; color: $button-disabled-text; }
-
+/* Input Fields */
 Input {
     border: round $accent;
     padding-left: 1;
@@ -138,7 +131,14 @@ Input {
     color: $button-text;
 }
 
-/* Footer (not scrollable, always at bottom) */
+/* Empty steps */
+.empty_steps {
+    padding-left: 2;
+    color: $text-muted;
+    text-style: italic;
+}
+
+/* Footer */
 Footer {
     height: 1;
 }

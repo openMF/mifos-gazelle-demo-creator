@@ -5,23 +5,28 @@ venv := ".venv"
 python := if os() == "windows" { ".venv/Scripts/python.exe" } else { ".venv/bin/python" }
 
 # Install dependencies using uv
-install:
+setup:
     uv venv .venv
     @{{python}} -m ensurepip --upgrade
     @{{python}} -m pip install -e .
 
 # Run the TUI app
-create-demo:
+run:
     sudo -v
-    @{{python}} demo_creator.py
+    @{{python}} main.py
 
-# # Run tests
-# test:
-#     @{{python}} -m pytest tests/
+# Clean virtualenv and cache
+clean:
+    find . -type d -name "__pycache__" -exec rm -rf {} +
+    rm -rf .venv *.pyc *.egg-info .mypy_cache .pytest_cache
 
-# # Format using black
-# format:
-#     @{{python}} -m black demo_creator tests
+# Run tests
+test:
+    @{{python}} -m pytest tests/
+
+# Format using black
+format:
+    @{{python}} -m black demo_creator tests
 
 # Lint using flake8
 lint:

@@ -3,8 +3,10 @@ from textual.containers import Vertical
 from textual.widgets import Static, Input, Button, Footer
 from textual.app import ComposeResult
 
+
 class LoginScreen(Screen):
-    CSS_PATH = "../assets/login.tcss"
+    CSS_PATH = "../assets/login_form.tcss"
+
     def compose(self) -> ComposeResult:
         with Vertical(id="login_form"):
             yield Static("Enter your user details", id="login_title")
@@ -18,7 +20,6 @@ class LoginScreen(Screen):
             yield self.status
             yield Button("Continue", id="continue_login")
         yield Footer()
-
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "continue_login":
