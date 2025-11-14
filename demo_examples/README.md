@@ -1,32 +1,59 @@
-# Demo Examples
+# Demo Examples for GAZ-211
 
-This directory contains example demo files created using the Mifos Gazelle Demo Creator TUI.
+This directory contains the customer onboarding demo created for the GAZ-211 task.
+
+## Task: Demo 5 - Create your own Demo
+
+**Requirement**: Design a demo using Gazelle components for a use case, created using Mifos-Gazelle Demo Creator and visible in Demo-Runtime.
 
 ## Customer Onboarding Demo
 
-**File**: `customer_onboarding_demo.json`
+**File**: `customer_onboarding_demo.json`  
+**Use Case**: New customer registration workflow for financial services
 
-A 4-step customer onboarding flow demonstrating:
-1. Welcome page introduction
-2. Personal details collection
-3. Document upload process
-4. Confirmation and submission
+### Demo Flow:
+1. **Welcome** - Introduction and overview
+2. **Personal Details** - Customer information collection  
+3. **Document Upload** - Identity verification
+4. **Confirmation** - Review and submission
 
-**Created for**: GAZ-211 issue
-**Tags**: onboarding, demo5
+### Technical Details:
+- **Demo ID**: `5bc9ad4e-6d7b-4701-941a-5293d0654139`
+- **Steps Count**: 4
+- **Tags**: `onboarding`, `demo5`
+- **Format**: Standard Mifos Gazelle Demo JSON structure
 
-## How to Use
+## Testing Instructions
 
-1. Run the demo creator: `uv run python main.py`
-2. Use "Create Demo" to build similar demos
-3. Export demos to JSON format
-4. Upload to Artifactory using the TUI
+1. **Load in Demo Creator**:
+   ```bash
+   uv run python main.py
+   ```
 
-## Demo Structure
+2. **Import Demo**: Use the TUI to load `customer_onboarding_demo.json`
 
-Each demo JSON contains:
-- `demoId`: Unique identifier
-- `demoName`: Display name
-- `steps`: Numbered steps with title, URL, and details
-- `tags`: Categorization tags
-- `demoDescription`: Brief description
+3. **Verify Structure**: Check all steps, URLs, and metadata
+
+4. **Deploy to Runtime**: Upload via TUI for Demo-Runtime visibility
+
+## Compliance
+
+✅ Uses existing Mifos Gazelle Demo Creator  
+✅ Follows standard demo JSON format  
+✅ No core code modifications  
+✅ No additional dependencies  
+✅ Ready for Demo-Runtime deployment
+
+## JSON Structure
+
+```json
+{
+  "demoId": "unique-identifier",
+  "demoName": "Display name", 
+  "steps": {
+    "1": { "title": "Step name", "url": "/path", "details": "Description" }
+  },
+  "tags": ["category", "type"],
+  "demoDescription": "Brief overview"
+}
+```
