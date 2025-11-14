@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A TUI tool to create and upload demo steps as JSON to JFrog."
 authors = [{ name = "Yash Sharma" }]
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
   "textual>=4.0.0",
   "jsonschema>=4.24.0",

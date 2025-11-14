@@ -65,14 +65,19 @@ fi
 # Step 4: Install just
 # ------------------------
 if ! command -v just &>/dev/null; then
-    echo "just not found. Installing..."
+    echo "just not found. Installing via GitHub release..."
     if [ "$IS_WINDOWS" = true ]; then
-        echo "Installing just for Windows (to ~/.cargo/bin)..."
-        powershell -Command "iwr https://just.systems/install.ps1 -UseBasicParsing | iex"
+        echo "Downloading just for Windows..."
+        mkdir -p ~/.local/bin
+        curl -L https://github.com/casey/just/releases/latest/download/just-x86_64-pc-windows-msvc.zip -o just.zip
+        unzip -o just.zip -d ~/.local/bin/
+        rm just.zip
+        export PATH="$HOME/.local/bin:$PATH"
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
     else
-        curl -sSf https://just.systems/install.sh | bash -s -- --to ~/.cargo/bin
-        export PATH="$HOME/.cargo/bin:$PATH"
-        echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc
+        curl -sSf https://just.systems/install.sh | bash -s -- --to ~/.local/bin
+        export PATH="$HOME/.local/bin:$PATH"
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
     fi
 else
     echo "just is already installed."
@@ -83,6 +88,7 @@ fi
 # ------------------------
 echo
 echo "All tools are ready!"
+echo "Restart your terminal or run: source ~/.bashrc"
 echo "Next steps:"
 echo "    just setup"
 echo "    just run"
