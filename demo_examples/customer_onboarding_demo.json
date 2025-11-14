@@ -1,0 +1,31 @@
+{
+  "demoId": "5bc9ad4e-6d7b-4701-941a-5293d0654139",
+  "demoName": "Customer Onboarding Demo",
+  "steps": {
+    "1": {
+      "title": "Welcome",
+      "url": "/onboarding/welcome",
+      "details": "This is the welcome page for the onboarding process."
+    },
+    "2": {
+      "title": "Personal Details",
+      "url": "/onboarding/personal-info",
+      "details": "User enters name, age and phone number."
+    },
+    "3": {
+      "title": "Document Upload",
+      "url": "/onboarding/doc-upload",
+      "details": "User uploads required identity documents."
+    },
+    "4": {
+      "title": "Confirmation",
+      "url": "/onboarding/confirmation",
+      "details": "User reviews entered information and submits the onboarding request."
+    }
+  },
+  "tags": [
+    "onboarding",
+    "demo5"
+  ],
+  "demoDescription": "A simple 4-step onboarding flow created for GAZ-211."
+}
