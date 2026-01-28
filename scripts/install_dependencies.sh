@@ -73,6 +73,7 @@ if ! command -v just &>/dev/null; then
         curl -sSf https://just.systems/install.sh | bash -s -- --to ~/.cargo/bin
         export PATH="$HOME/.cargo/bin:$PATH"
         echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc
+        source ~/.bashrc
     fi
 else
     echo "just is already installed."
