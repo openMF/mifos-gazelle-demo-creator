@@ -72,8 +72,24 @@ if ! command -v just &>/dev/null; then
     else
         curl -sSf https://just.systems/install.sh | bash -s -- --to ~/.cargo/bin
         export PATH="$HOME/.cargo/bin:$PATH"
-        echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc
-        source ~/.bashrc
+        USER_SHELL="$(basename "$SHELL")"
+        case "$USER_SHELL" in
+            zsh)  RC_FILE="$HOME/.zshrc" ;;
+            bash) RC_FILE="$HOME/.bashrc" ;;
+            *)    RC_FILE="$HOME/.profile" ;;
+        esac
+
+        if ! grep -q 'cargo/bin' "$RC_FILE" 2>/dev/null; then
+            echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> "$RC_FILE"
+        fi
+    fi
+
+    # Verify installation
+    if ! command -v just >/dev/null ; then
+        echo "ERROR: just installed but still not available on PATH"
+        echo "Restart your terminal or run:"
+        echo "  source $RC_FILE"
+        exit 1
     fi
 else
     echo "just is already installed."
