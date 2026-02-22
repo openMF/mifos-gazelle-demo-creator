@@ -1,0 +1,22 @@
+{
+  "demoName": "Demo 2 - Payment between MifosX Green Bank to Mifos X Blue Bank via vNext",
+  "demoDescription": "Interactive flow showing inter-bank settlement using the vNext protocol bridge.",
+  "tags": ["vnext", "payments", "interop"],
+  "steps": {
+    "1": {
+      "title": "Select Origin Bank",
+      "url": "https://mifos.org/green-bank",
+      "details": "Log in to MifosX Green Bank and select the sender account."
+    },
+    "2": {
+      "title": "Initiate vNext Bridge",
+      "url": "https://mifos.org/vnext-bridge",
+      "details": "Connect the vNext payment bridge to authenticate the destination ledger."
+    },
+    "3": {
+      "title": "Confirm Inter-Bank Settlement",
+      "url": "https://mifos.org/settlement-logs",
+      "details": "Verify that the funds have been successfully moved and reconciled between Green and Blue banks."
+    }
+  }
+}
