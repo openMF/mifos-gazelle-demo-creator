@@ -1,22 +1,22 @@
 {
-  "demoName": "Demo 2 - Payment between MifosX Green Bank to Mifos X Blue Bank via vNext",
-  "demoDescription": "Interactive flow showing inter-bank settlement using the vNext protocol bridge.",
-  "tags": ["vnext", "payments", "interop"],
+  "demoName": "GAZ-208: Loan Repayment and Transaction Verification",
+  "demoDescription": "Interactive flow showing real-time loan repayment and ledger reconciliation using Apache Fineract existing components.",
+  "tags": ["fineract", "payments", "loan-transactions"],
   "steps": {
     "1": {
-      "title": "Select Origin Bank",
-      "url": "https://mifos.org/green-bank",
-      "details": "Log in to MifosX Green Bank and select the sender account."
+      "title": "Select Origin Client",
+      "url": "https://reimagined-telegram-jj4vx647xwqpfqx4p-8443.app.github.dev/fineract-provider/api/v1/clients",
+      "details": "Access the existing Client component to identify the sender and verify account status."
     },
     "2": {
-      "title": "Initiate vNext Bridge",
-      "url": "https://mifos.org/vnext-bridge",
-      "details": "Connect the vNext payment bridge to authenticate the destination ledger."
+      "title": "Initiate Loan Repayment",
+      "url": "https://reimagined-telegram-jj4vx647xwqpfqx4p-8443.app.github.dev/fineract-provider/swagger-ui/index.html#/Loan%20Transactions/executeLoanTransaction",
+      "details": "Execute repayment via Fineract business logic. Technical Endpoint: /fineract-provider/api/v1/loans/1/transactions?command=repayment"
     },
     "3": {
-      "title": "Confirm Inter-Bank Settlement",
-      "url": "https://mifos.org/settlement-logs",
-      "details": "Verify that the funds have been successfully moved and reconciled between Green and Blue banks."
+      "title": "Confirm Transaction Settlement",
+      "url": "https://reimagined-telegram-jj4vx647xwqpfqx4p-8443.app.github.dev/fineract-provider/api/v1/loans/1/transactions",
+      "details": "Verify the transaction ledger to ensure funds have been successfully moved and reconciled in the system."
     }
   }
 }
