@@ -1,0 +1,15 @@
+{
+  "demoId": "f455955f-1cfc-4c0e-8581-e3f3e92d0955",
+  "demoName": "Demo 3 - Setting up accounts in MifosX",
+  "steps": {
+    "1": {
+      "title": "Open MifosX Clients Page",
+      "url": "http://localhost:8080",
+      "details": "Navigate to the clients section to begin account setup."
+    }
+  },
+  "tags": [
+    "MifosX"
+  ],
+  "demoDescription": "Demo showing how to create and configure savings and loan accounts in MifosX."
+}

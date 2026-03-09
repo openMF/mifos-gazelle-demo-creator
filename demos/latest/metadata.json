@@ -1,0 +1,20 @@
+{
+  "demos": [
+    {
+      "demoId": "f455955f-1cfc-4c0e-8581-e3f3e92d0955",
+      "name": "Demo 3 - Setting up accounts in MifosX",
+      "file_name": "demo_3__setting_up_accounts_in_mifosx.json",
+      "description": "Demo showing how to create and configure savings and loan accounts in MifosX.",
+      "version": 1,
+      "steps_count": 1,
+      "created_at": "2026-02-21T12:13:00Z",
+      "updated_at": "2026-02-21T12:13:00Z",
+      "created_by": "swastim01",
+      "last_modified_by": "swastim01",
+      "deleted": false,
+      "tags": [
+        "MifosX"
+      ]
+    }
+  ]
+}
