@@ -1,0 +1,26 @@
+{
+  "demoId": "dba05ab6-9b7d-4ba8-ab7b-95c769e5ffaa",
+  "demoName": "Loan & Interest Settings Guide",
+  "steps": {
+    "1": {
+      "title": "Access Loan Product Creation",
+      "url": "https://demo.mifos.io/#/products/loan-products/create",
+      "details": "Enter a unique Product Name and Short Name (e.g., \"Standard-Business-Loan\"). Select the Currency and define the Principal amount to establish the base terms for the loan product."
+    },
+    "2": {
+      "title": "Set Interest Calculation Logic",
+      "url": "https://demo.mifos.io/#/products/loan-products/create",
+      "details": "Locate the Settings section. Set the Interest Method to Declining Balance and the Interest calculation period to Daily. This ensures interest is accurately calculated based on the remaining balance rather than a flat rate."
+    },
+    "3": {
+      "title": "Define Moratorium Settings",
+      "url": "https://demo.mifos.io/#/products/loan-products/create",
+      "details": "Scroll to the Moratorium section. In the Grace on principal payment field, enter 2. This configuration allows a two-cycle \"payment holiday\" where the borrower only pays interest, showcasing the advanced logic requested in the ticket."
+    }
+  },
+  "tags": [
+    "fineract",
+    "mifos-x"
+  ],
+  "demoDescription": "A comprehensive guide to configuring loan products in Mifos X, demonstrating Declining Balance interest methods and Moratorium (grace period) settings."
+}
