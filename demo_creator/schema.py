@@ -1,4 +1,6 @@
 # TODO: add other required fields
+import os
+_current_user = os.getenv("USER", "ubuntu")
 
 schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
@@ -81,7 +83,17 @@ DPG_DEFAULT_CONFIG = {
         "GAZELLE_DOMAIN": "mifos.gazelle.test",
         "GAZELLE_VERSION": "1.1.0",
     },
-    "environment": {"user": "yash-sharma"},
+    "environment": {"user": _current_user},
+    "kubernetes": {
+        "environment": "local",
+        "k8s_user": _current_user,
+        "k8s_version": "1.33",
+        "kubeconfig_path": "~/.kube/config",
+        "min_ram": "6",
+        "min_free_space": "30",
+        "linux_os_list": "Ubuntu",
+        "ubuntu_ok_versions_list": "22 24",
+    },
     "mysql": {
         "MYSQL_SERVICE_NAME": "mysql",
         "MYSQL_SERVICE_PORT": "3306",

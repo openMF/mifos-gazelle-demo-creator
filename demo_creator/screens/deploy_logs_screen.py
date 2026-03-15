@@ -112,10 +112,22 @@ class DeployLogsScreen(Screen):
                 self._thread_safe_log("[green]Repo updated with latest changes!")
             # ---- DEPLOY STEP ----
             self._thread_safe_log("[dim]Starting deployment process...")
-            cmd = [
-                a if a != "{ini_path}" else self.ini_path
-                for a in self.deploy_cmd_template
-            ]
+            import configparser as _cp
+            _cfg = _cp.ConfigParser()
+            _cfg.read(self.ini_path)
+            _mode = _cfg.get("general", "mode", fallback="deploy")
+            _user = os.getenv("USER", os.getenv("LOGNAME", "ubuntu"))
+            cmd = []
+            for a in self.deploy_cmd_template:
+                if a == "{ini_path}":
+                    
+                    cmd.append(self.ini_path)
+                elif a == "{mode}":
+                    cmd.append(_mode)
+                elif a == "{user}":
+                    cmd.append(_user)
+                else:
+                    cmd.append(a)
             proc = subprocess.Popen(
                 cmd,
                 cwd=self.repo_dir,
