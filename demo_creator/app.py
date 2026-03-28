@@ -11,7 +11,8 @@ from demo_creator.screens import (
 class DemoCreatorApp(App):
     CSS_PATH = "./assets/base.tcss"
 
-    BINDINGS = [ 
+    BINDINGS = [
+       Binding("ctrl+q", "quit", "Quit", show=True),  
        Binding("ctrl+z", "suspend_process", "Suspend (go to terminal)", show=True), 
     ]
 
