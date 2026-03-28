@@ -116,11 +116,10 @@ class DeployLogsScreen(Screen):
             _cfg = _cp.ConfigParser()
             _cfg.read(self.ini_path)
             _mode = _cfg.get("general", "mode", fallback="deploy")
-            _user = os.getenv("USER", os.getenv("LOGNAME", "ubuntu"))
+            _user = _cfg.get("environment", "user", fallback="")
             cmd = []
             for a in self.deploy_cmd_template:
                 if a == "{ini_path}":
-                    
                     cmd.append(self.ini_path)
                 elif a == "{mode}":
                     cmd.append(_mode)
