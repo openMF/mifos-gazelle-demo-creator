@@ -112,6 +112,20 @@ class DeployLogsScreen(Screen):
                 self._thread_safe_log("[green]Repo updated with latest changes!")
             # ---- DEPLOY STEP ----
             self._thread_safe_log("[dim]Starting deployment process...")
+            self._thread_safe_log("[dim]Requesting sudo access...")
+            sudo_check = subprocess.run(
+                ["sudo", "-v"],
+                stdin=open("/dev/tty", "r"),
+                text=True
+            )
+            if sudo_check.returncode != 0:
+                self._thread_safe_log("[red]Sudo authentication failed. Cannot deploy.")
+                self._thread_safe_status("[red]Sudo failed.")
+                self.process_ok = False
+                self.process_finished = True
+                return
+            self._thread_safe_log("[green]Sudo access granted.")
+
             import configparser as _cp
             _cfg = _cp.ConfigParser()
             _cfg.read(self.ini_path)
