@@ -1,0 +1,21 @@
+{
+  "demos": [
+    {
+      "demoId": "4f187905-c47e-4ebd-a095-ba254e8bfd80",
+      "name": "Batch Payments flow from PHEE - Mifos X",
+      "file_name": "batch_payments_flow_from_phee__mifos_x.json",
+      "description": "End-to-end batch payment flow from Payment Hub EE to Mifos X",
+      "version": 1,
+      "steps_count": 5,
+      "created_at": "2026-04-20T09:42:33Z",
+      "updated_at": "2026-04-22T11:03:55Z",
+      "created_by": "kanishk05",
+      "last_modified_by": "kanishk05",
+      "deleted": false,
+      "tags": [
+        "MifosX",
+        "Phee"
+      ]
+    }
+  ]
+}
