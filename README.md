@@ -6,6 +6,10 @@
 - **User Guide:** see [USER_GUIDE.md](./docs/USER_GUIDE.md)
 - **Architecture & repo layout:** see [ARCHITECTURE.md](./docs/ARCHITECTURE.md)
 
+## Demo
+
+[![Demo](https://asciinema.org/a/qcQj06vwexiCaWfs.svg)](https://asciinema.org/a/qcQj06vwexiCaWfs)
+
 ## Features
 
 - Create demo files with steps, descriptions, and tags
