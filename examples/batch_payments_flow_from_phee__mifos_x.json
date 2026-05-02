@@ -1,0 +1,36 @@
+{
+  "demoName": "Batch Payments flow from PHEE - Mifos X",
+  "demoDescription": "End-to-end batch payment flow from Payment Hub EE to Mifos X",
+  "tags": [
+    "MifosX",
+    "Phee"
+  ],
+  "steps": {
+    "1": {
+      "title": "Login to Ops Web",
+      "url": "https://ops.mifos.gazelle.test",
+      "details": "Login with default credentials to access the Payment Hub EE Operations Web"
+    },
+    "2": {
+      "title": "Upload Batch CSV",
+      "url": "https://ops.mifos.gazelle.test",
+      "details": "Upload the pre-generated bulk payment CSV file for the batch transaction"
+    },
+    "3": {
+      "title": "Approve the Batch",
+      "url": "https://ops.mifos.gazelle.test",
+      "details": "Review and approve the batch payment request"
+    },
+    "4": {
+      "title": "Monitor Batch Status",
+      "url": "https://ops.mifos.gazelle.test",
+      "details": "Monitor the batch processing status until completion"
+    },
+    "5": {
+      "title": "Verify Payments in MifosX",
+      "url": "http://mifos.mifos.gazelle.test",
+      "details": "Login to MifosX and verify the payments have been received"
+    }
+  },
+  "demoId": "4f187905-c47e-4ebd-a095-ba254e8bfd80"
+}
