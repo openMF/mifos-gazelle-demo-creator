@@ -4,8 +4,12 @@ Publish demos from demos/latest/ to mifos-gazelle-demo-runtime/public/examples/
 Run with: just publish
 """
 import json
-import shutil
 from pathlib import Path
+import shutil
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from demo_creator.utils import load_metadata
+
 
 
 def load_env():
@@ -17,7 +21,8 @@ def load_env():
                 line = line.strip()
                 if line and not line.startswith("#") and "=" in line:
                     key, value = line.split("=", 1)
-                    env[key.strip()] = value.strip()
+                    value = value.strip().strip("\x27\x22")
+                    env[key.strip()] = value
     return env
 
 
@@ -27,7 +32,6 @@ def publish():
 
     base_dir = Path(__file__).parent.parent
     demos_dir = base_dir / "demos" / "latest"
-    metadata_file = demos_dir / "metadata.json"
     runtime_examples_dir = (base_dir / runtime_path / "public" / "examples").resolve()
 
     if not runtime_examples_dir.exists():
@@ -35,12 +39,11 @@ def publish():
         print("Make sure DEMO_RUNTIME_PATH is set correctly in .env")
         return
 
-    if not metadata_file.exists():
-        print("Error: No demos found. Create a demo first using just run")
+    try:
+        metadata = load_metadata()
+    except Exception as e:
+        print(f"Error loading metadata: {e}")
         return
-
-    with open(metadata_file) as f:
-        metadata = json.load(f)
 
     active_demos = [d for d in metadata["demos"] if not d["deleted"]]
 
