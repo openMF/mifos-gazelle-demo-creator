@@ -31,3 +31,7 @@ format:
 # Lint using flake8
 lint:
     @{{python}} -m flake8 demo_creator tests
+
+# Publish demos to mifos-gazelle-demo-runtime
+publish:
+    @{{python}} scripts/publish_demos.py
