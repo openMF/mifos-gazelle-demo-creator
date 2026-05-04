@@ -21,7 +21,7 @@ def load_env():
                 line = line.strip()
                 if line and not line.startswith("#") and "=" in line:
                     key, value = line.split("=", 1)
-                    value = value.strip().strip("\x27\x22")
+                    value = value.strip().strip("'\"")
                     env[key.strip()] = value
     return env
 
