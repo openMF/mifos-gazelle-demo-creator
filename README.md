@@ -6,6 +6,12 @@
 - **User Guide:** see [USER_GUIDE.md](./docs/USER_GUIDE.md)
 - **Architecture & repo layout:** see [ARCHITECTURE.md](./docs/ARCHITECTURE.md)
 
+## Demo
+
+🎥 [Watch Full Demo Video](https://youtu.be/JGBA4zhxx54)
+
+This video covers the complete end-to-end workflow — creating a demo in the TUI, publishing it with `just publish`, and viewing it live in Demo Runtime.
+
 ## Features
 
 - Create demo files with steps, descriptions, and tags
