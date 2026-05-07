@@ -35,6 +35,7 @@ just setup
 just run
 # or: .venv/bin/python main.py
 ```
+NOTE: run `source ~/.bashrc` command OR run `just` command in new terminal to avoid `bash: just: command not found error`
 
 ## Usage
 

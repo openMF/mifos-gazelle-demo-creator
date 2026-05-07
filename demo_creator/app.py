@@ -1,4 +1,5 @@
 from textual.app import App
+from textual.binding import Binding
 from demo_creator.screens import (
     LoginScreen,
     MainMenuScreen,
@@ -9,6 +10,11 @@ from demo_creator.screens import (
 
 class DemoCreatorApp(App):
     CSS_PATH = "./assets/base.tcss"
+
+    BINDINGS = [
+       Binding("ctrl+q", "quit", "Quit", show=True),  
+       Binding("ctrl+z", "suspend_process", "Suspend (go to terminal)", show=True), 
+    ]
 
     def on_mount(self):
         self.push_screen(LoginScreen())

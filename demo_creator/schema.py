@@ -1,4 +1,6 @@
 # TODO: add other required fields
+import os
+_current_user = os.getenv("USER", "ubuntu")
 
 schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
@@ -80,8 +82,20 @@ DPG_DEFAULT_CONFIG = {
         "mode": "deploy",
         "GAZELLE_DOMAIN": "mifos.gazelle.test",
         "GAZELLE_VERSION": "1.1.0",
+        "logging": "false",
+        "startup_timeout": "600",
     },
-    "environment": {"user": "yash-sharma"},
+    "environment": {"user": _current_user},
+    "kubernetes": {
+        "environment": "local",
+        "k8s_user": _current_user,
+        "k8s_version": "1.35",
+        "kubeconfig_path": "~/.kube/config",
+        "min_ram": "6",
+        "min_free_space": "30",
+        "linux_os_list": "Ubuntu",
+        "ubuntu_ok_versions_list": "22 24",
+    },
     "mysql": {
         "MYSQL_SERVICE_NAME": "mysql",
         "MYSQL_SERVICE_PORT": "3306",
@@ -116,7 +130,7 @@ DPG_DEFAULT_CONFIG = {
         "PH_RELEASE_NAME": "phee",
         "PH_REPO_LINK": "https://github.com/openMF/ph-ee-env-labs.git",
         "PH_EE_ENV_TEMPLATE_REPO_LINK": "https://github.com/openMF/ph-ee-env-template.git",
-        "PH_EE_ENV_TEMPLATE_REPO_BRANCH": "v1.13.0-gazelle-1.1.0",
+        "PH_EE_ENV_TEMPLATE_REPO_BRANCH": "mifos-v2.0.0",
         "PH_EE_ENV_TEMPLATE_REPO_DIR": "ph_template",
     },
 }
