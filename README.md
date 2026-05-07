@@ -8,7 +8,7 @@
 
 ## Demo
 
-🎥 [Watch Full Demo Video](https://drive.google.com/file/d/10WXR4D9Oxb3f_hvXF2CybZaCYl7aZUJf/view?usp=sharing)
+🎥 [Watch Full Demo Video](https://youtu.be/JGBA4zhxx54)
 
 This video covers the complete end-to-end workflow — creating a demo in the TUI, publishing it with `just publish`, and viewing it live in Demo Runtime.
 
