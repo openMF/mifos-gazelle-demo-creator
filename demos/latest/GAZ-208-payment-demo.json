@@ -1,0 +1,22 @@
+{
+  "demoName": "GAZ-208: Loan Repayment and Transaction Verification",
+  "demoDescription": "Interactive flow showing real-time loan repayment and ledger reconciliation using Apache Fineract existing components.",
+  "tags": ["fineract", "payments", "loan-transactions"],
+  "steps": {
+    "1": {
+      "title": "Select Origin Client",
+      "url": "https://reimagined-telegram-jj4vx647xwqpfqx4p-8443.app.github.dev/fineract-provider/api/v1/clients",
+      "details": "Access the existing Client component to identify the sender and verify account status."
+    },
+    "2": {
+      "title": "Initiate Loan Repayment",
+      "url": "https://reimagined-telegram-jj4vx647xwqpfqx4p-8443.app.github.dev/fineract-provider/swagger-ui/index.html#/Loan%20Transactions/executeLoanTransaction",
+      "details": "Execute repayment via Fineract business logic. Technical Endpoint: /fineract-provider/api/v1/loans/1/transactions?command=repayment"
+    },
+    "3": {
+      "title": "Confirm Transaction Settlement",
+      "url": "https://reimagined-telegram-jj4vx647xwqpfqx4p-8443.app.github.dev/fineract-provider/api/v1/loans/1/transactions",
+      "details": "Verify the transaction ledger to ensure funds have been successfully moved and reconciled in the system."
+    }
+  }
+}
